@@ -48,13 +48,49 @@ case "$gameconsole" in
     done
     ;;
 2)
-    echo "N64 selected"
-    select ROMGAME in $(cat repos/n64.txt); do
-        echo "lel"
-    done
-
+    clear
+    echo "N64 selected
+    what game would you like to have?"
+    read n64rom
+    romsearch "~/cloudpie/repos/n64.txt" "$n64rom"
+    cd $ROMDIR
+    CURRENTROM=$(cat ~/cloudpie/cache.txt)
+    wget https://the-eye.eu/public/rom/Nintendo%2064/Roms/"$CURRENTROM"
+    rm ~/cloudpie/cache.txt
     ;;
 3)
+    clear
+    echo "SNES selected"
+
+    ;;
+*)
     echo "system not supported"
     ;;
 esac
+
+
+function romsearch() {
+    cat "$1" | agrep -2 -i "$2" >romsearch.txt
+
+    HEIGHT=15
+    WIDTH=50
+    CHOICE_HEIGHT=4
+    BACKTITLE="ROM selection"
+    TITLE="ROMS"
+    MENU="Select rom:"
+
+    OPTIONS=(1 "awk '{if(NR==1) print $0}' romsearch.txt"
+        2 "awk '{if(NR==2) print $0}' romsearch.txt"
+        3 "awk '{if(NR==3) print $0}' romsearch.txt")
+
+    CHOICE=$(dialog --clear \
+        --backtitle "$BACKTITLE" \
+        --title "$TITLE" \
+        --menu "$MENU" \
+        $HEIGHT $WIDTH $CHOICE_HEIGHT \
+        "${OPTIONS[@]}" \
+        2>&1 >/dev/tty)
+    rm romsearch.txt
+    clear
+    echo $CHOICE >~/cloudpie/cache.txt
+}
