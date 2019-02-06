@@ -64,13 +64,19 @@ select console in $(cat platforms.txt); do
     pushd repos
     LINK=$(cat $console.txt | tail -1)
 
-    cat "$console".txt | head -n -1 | agrep -i -2 "$ROMGAME" | head -10 >cache.txt
+    cat "$console".txt | head -n -1 | agrep -i -2 "$ROMGAME" | head -20 >cache.txt
     IFS2="$IFS"
     IFS=$'\n'
     select game in $(cat cache.txt); do
         pushd "$ROMDIR"
         echo "downloading $game"
         wget "$LINK$game"
+        if [ "$game" == *".zip" ]
+        then
+            echo "unpacking game"
+            unzip ./"$game"
+            rm $game
+        fi
         popd
         break
     done
