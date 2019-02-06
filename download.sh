@@ -1,5 +1,12 @@
 #!/bin/bash
 
+function mkcd() {
+    if ! [ -e "$1" ]; then
+        mkdir "$1"
+    fi
+    cd "$1"
+}
+
 function repoload() {
     # $1 is the link
     # $2 is the repo file name
@@ -12,19 +19,19 @@ function repoload() {
     rm "$2".tmp2
     rm "$2".tmp
     echo "https://the-eye.eu/public/rom/$1/" >>"$2".txt
+    sleep 1
 
 }
 
-# Nintendo%2064/Roms/
 function romupdate() {
     mkdir -p ~/cloudpie/repos
     pushd ~/cloudpie/repos
 
     repoload 'Nintendo%2064/Roms' n64 "Nintendo 64" z64
-    sleep 1
     repoload 'SNES' snes "Super Nintendo Entertainment System" zip
-    sleep 1
     repoload 'Playstation/Games/NTSC' psx "Play Station 1" zip
+    repoload 'Nintendo Gameboy Advance/' gba "Game Boy Advance" zip
+    
     popd
 }
 
@@ -70,9 +77,9 @@ select console in $(cat platforms.txt); do
     select game in $(cat cache.txt); do
         pushd "$ROMDIR"
         echo "downloading $game"
+        mkcd "$console"
         wget "$LINK$game"
-        if [ "$game" == *".zip" ]
-        then
+        if [ "$game" == *".zip" ]; then
             echo "unpacking game"
             unzip ./"$game"
             rm $game
