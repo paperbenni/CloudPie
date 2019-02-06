@@ -31,7 +31,7 @@ function romupdate() {
     repoload 'SNES' snes "Super Nintendo Entertainment System" zip
     repoload 'Playstation/Games/NTSC' psx "Play Station 1" zip
     repoload 'Nintendo Gameboy Advance/' gba "Game Boy Advance" zip
-    
+
     popd
 }
 
@@ -53,9 +53,9 @@ if ! dialog --version; then
     exit
 fi
 
-pushd .config/cloudpie
+pushd ~/.config/cloudpie
 
-if [ -e rom.conf]; then
+if [ -e rom.conf ]; then
     ROMDIR=$(cat rom.conf)
 else
     ROMDIR="$HOME/cloudpie/roms"
@@ -66,25 +66,36 @@ popd
 cd ~/cloudpie
 
 echo "for what console would you like your game?"
-
+PS3="Select platform: "
 select console in $(cat platforms.txt); do
     pushd repos
     LINK=$(cat $console.txt | tail -1)
 
     cat "$console".txt | head -n -1 | agrep -i -2 "$ROMGAME" | head -20 >cache.txt
+
     IFS2="$IFS"
     IFS=$'\n'
+    PS3="Choose from results: "
     select game in $(cat cache.txt); do
-        pushd "$ROMDIR"
         echo "downloading $game"
+
+        pushd "$ROMDIR"
         mkcd "$console"
-        wget "$LINK$game"
-        if [ "$game" == *".zip" ]; then
-            echo "unpacking game"
-            unzip ./"$game"
-            rm $game
+        GAMENAME=${game%.zip}
+
+        if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
+            echo "game $GAMENAME already exists"
+        else
+            wget "$LINK$game"
+            if [ "$game" == *".zip" ]; then
+                echo "unpacking game"
+                unzip ./"$game"
+                rm $game
+            fi
         fi
+
         popd
+        rm cache.txt
         break
     done
     break
