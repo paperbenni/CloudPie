@@ -30,7 +30,8 @@ function romupdate() {
     repoload 'Nintendo%2064/Roms' n64 "Nintendo 64" z64
     repoload 'SNES' snes "Super Nintendo Entertainment System" zip
     repoload 'Playstation/Games/NTSC' psx "Play Station 1" zip
-    repoload 'Nintendo Gameboy Advance/' gba "Game Boy Advance" zip
+    repoload 'Nintendo Gameboy Advance' gba "Game Boy Advance" zip
+    repoload 'Nintendo%20DS' ds "Nintendo DS" 7z
 
     popd
 }
@@ -90,6 +91,12 @@ select console in $(cat platforms.txt); do
             if [ "$game" == *".zip" ]; then
                 echo "unpacking game"
                 unzip ./"$game"
+                rm $game
+            fi
+            
+            if [ "$game" == *".7z" ]; then
+                echo "unpacking game"
+                7za x ./"$game"
                 rm $game
             fi
         fi

@@ -10,8 +10,16 @@ armv6l)
 x86_64)
     echo "PC"
     echo '~/cloudpie/roms' >~/.config/cloudpie/rom.conf
-    sudo apt-get update
-    sudo apt install -y retroarch libretro-*
+
+    if apt --version; then
+        sudo apt-get update
+        sudo apt install -y retroarch git agrep wget rclone libretro-* p7zip-full
+    fi
+
+    if pacman --version; then
+        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/packages/arch.txt | sudo pacman -S -
+    fi
+
     ;;
 esac
 
