@@ -82,7 +82,7 @@ select console in $(cat platforms.txt); do
 
         pushd "$ROMDIR"
         mkcd "$console"
-        GAMENAME=${game%.zip}
+        GAMENAME=${game%.*}
 
         if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
             echo "game $GAMENAME already exists"
@@ -93,7 +93,7 @@ select console in $(cat platforms.txt); do
                 unzip ./"$game"
                 rm $game
             fi
-            
+
             if [ "$game" == *".7z" ]; then
                 echo "unpacking game"
                 7za x ./"$game"
