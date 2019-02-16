@@ -1,7 +1,7 @@
 # CloudPie
 
-This project is aiming to be a cloud solution for RetroPie
-It's not stable yet, contributions are always welcome!
+This project is aiming to be a cloud solution for RetroPie, Lakka or Retroarch on Linux
+It's not stable or fully functional yet, contributions are always welcome!
 
 ## Install
 ```

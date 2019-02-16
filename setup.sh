@@ -4,6 +4,19 @@ echo "installing cloudpie"
 
 DEVICE=$(uname -m)
 
+function changeconf() {
+    if ! [ -z "$2" ]; then
+        echo "usage: changeconf option value"
+    fi
+    if ! [ -z "$3" ]; then
+        if ! [ -e ~/.config/retroarch/retroarch.cfg ]; then
+            echo "generating config"
+            timeout 5 retroarch
+        fi
+    fi
+
+}
+
 case "$DEVICE" in
 armv6l)
     echo "raspberry pi"
@@ -20,7 +33,7 @@ x86_64)
 
     if apt --version; then
         sudo apt-get update
-        sudo apt install -y retroarch git agrep wget libretro-* p7zip-full
+        sudo apt install -y retroarch git agrep wget p7zip-full
         wget https://github.com/ncw/rclone/releases/download/v1.46/rclone-v1.46-linux-amd64.deb
         mv *.deb rclone.deb
         sudo dpkg -i -y rclone.deb
@@ -49,6 +62,9 @@ mkdir retroarch
 pushd retroarch
 mkdir saves
 mkdir quicksaves
+
+cget cores.sh
+bash cores.sh
 popd
 
 mkdir -p .config/cloudpie
@@ -60,16 +76,18 @@ cd /bin
 sudo cget cloudrom cloudpie
 sudo chmod +x cloudrom cloudpie
 
+cd ~
 mkdir -p .config/rclone
 pushd .config/rclone
 cget rclone.conf
-popd
+
+cd ~
 
 clear
 cd ~/cloudpie
 echo "what's your username?"
 read USERNAME
-echo "$USERNAME" > username.txt
+echo "$USERNAME" >username.txt
 if rclone lsd mega:"$USERNAME" &>/dev/null; then
     echo "user found, type in password"
 else
