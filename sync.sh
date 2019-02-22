@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if ! rclone --version; then
-    echo "please install rclone version 1.46 or newer to use the sync feature"
+    echo "please install rclone version 1.46 or higher to use the sync feature"
     exit
 fi
 
@@ -13,6 +13,6 @@ while :; do
         rclone mount mega:"$USERNAME/retroarch" ~/retroarch/
         sleep 2
     else
-        echo "wrong password"
+        echo "wrong password, type in a new one"
     fi
 done

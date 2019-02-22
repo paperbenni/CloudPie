@@ -5,8 +5,8 @@ if ! [ "$UNAME" = x86_64]; then
     exit
 fi
 
-mkdir -p ~/retroarch/cores
-pushd ~/retroarch/cores
+mkdir -p ~/cloudpie/cores
+pushd ~/cloudpie/cores
 wget -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/
 mv */*/*/*/*/*.zip ./
 rm -r buildbot*

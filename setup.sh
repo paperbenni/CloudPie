@@ -13,6 +13,10 @@ function changeconf() {
             echo "generating config"
             timeout 5 retroarch
         fi
+        pushd ~/.config/retroarch
+        NEWVALUE="$1 = \"$2\""
+        sed -i "/$1/c $NEWVALUE" retroarch.cfg
+        popd
     fi
 
 }
@@ -58,6 +62,8 @@ function cget() {
 
 pushd ~/
 
+mkdir retrorecords
+
 mkdir retroarch
 pushd retroarch
 mkdir saves
@@ -83,13 +89,33 @@ cget rclone.conf
 
 cd ~
 
+# change the retroarch directory configuration
+changeconf system_directory '~/retroarch/bios'
+changeconf libretro_directory '~/retroarch/cores'
+changeconf savefile_directory '~/cloudpie/save'
+changeconf recording_output_directory '~/retrorecords'
+
+
 clear
 cd ~/cloudpie
 echo "what's your username?"
 read USERNAME
+echo "enter password"
+read PASSWORD
+
 echo "$USERNAME" >username.txt
 if rclone lsd mega:"$USERNAME" &>/dev/null; then
-    echo "user found, type in password"
+    echo "user exists, checking password"
+    MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
+    if [ "$MEGAPASSWORD" = "$PASSWORD" ]; then
+        echo "login sucessfull"
+        sleep 2
+    else
+        echo "type in the correct password or choose another username please"
+    fi
 else
-    echo "user not found, creating account"
+    echo "user not found, creating new account"
+    echo "$PASSWORD" > ~/cloudpie/password.txt
+    rclone mkdir mega:"$USERNAME"
+    rclone cp ~/cloudpie/password.txt mega:"$USERNAME/password.txt"
 fi
