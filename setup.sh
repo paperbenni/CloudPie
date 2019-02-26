@@ -5,10 +5,10 @@ echo "installing cloudpie"
 DEVICE=$(uname -m)
 
 function changeconf() {
-    if ! [ -z "$2" ]; then
+    if [ -z "$2" ]; then
         echo "usage: changeconf option value"
     fi
-    if ! [ -z "$3" ]; then
+    if [ -z "$3" ]; then
         if ! [ -e ~/.config/retroarch/retroarch.cfg ]; then
             echo "generating config"
             timeout 5 retroarch
@@ -37,7 +37,24 @@ x86_64)
 
     if apt --version; then
         sudo apt-get update
-        sudo apt install -y retroarch git agrep wget p7zip-full
+        sudo apt install -y git agrep wget p7zip-full
+        mkdir -p ~/retroarch/retroarch
+
+        pushd ~retroarch/retroarch
+        wget retroarch.surge.sh/retroarch.zip
+        unzip retroarch.zip
+        rm retroarch.zip
+        chmod +x retroarch
+        if ./retroarch --version; then
+            echo "retroarch installed successfully"
+        else
+            echo "retroarch install failed"
+            exit 1
+        fi
+        popd
+
+        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/cores.sh | bash
+
         wget https://github.com/ncw/rclone/releases/download/v1.46/rclone-v1.46-linux-amd64.deb
         mv *.deb rclone.deb
         sudo dpkg -i -y rclone.deb
@@ -91,10 +108,12 @@ cd ~
 
 # change the retroarch directory configuration
 changeconf system_directory '~/retroarch/bios'
-changeconf libretro_directory '~/retroarch/cores'
 changeconf savefile_directory '~/cloudpie/save'
 changeconf recording_output_directory '~/retrorecords'
-
+changeconf cheat_database_path '~/retroarch/cheats'
+changeconf libretro_directory '~/retroarch/cores'
+changeconf joypad_autoconfig_dir '~/retroarch/autoconfig'
+changeconf content_database_path = '~/retroarch/database/rdb'
 
 clear
 cd ~/cloudpie
@@ -115,7 +134,7 @@ if rclone lsd mega:"$USERNAME" &>/dev/null; then
     fi
 else
     echo "user not found, creating new account"
-    echo "$PASSWORD" > ~/cloudpie/password.txt
+    echo "$PASSWORD" >~/cloudpie/password.txt
     rclone mkdir mega:"$USERNAME"
     rclone cp ~/cloudpie/password.txt mega:"$USERNAME/password.txt"
 fi
