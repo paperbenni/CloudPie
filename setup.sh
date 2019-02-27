@@ -1,6 +1,6 @@
 #!/bin/bash
 pushd ~
-
+rm -rf cloudpie
 mkdir cloudpie
 
 echo "installing cloudpie"
@@ -45,7 +45,9 @@ x86_64)
 
         mkdir -p ~/cloudpie/path
         rm ~/cloudpie/path/retroarch
-        pushd ~/cloudpie/path
+        pushd ~/cloudpie
+        mkdir save
+        cd path
         wget retroarch.surge.sh/retroarch
         chmod +x retroarch
 
@@ -58,7 +60,6 @@ x86_64)
 
         #generate new retroarch config files
         rm -rf ~/.config/retroarch
-
         timeout 8 ./retroarch
 
         popd
@@ -102,7 +103,6 @@ mkdir retrorecords
 
 mkdir retroarch
 pushd retroarch
-mkdir save
 mkdir quicksave
 
 popd
@@ -123,8 +123,6 @@ cd ~
 mkdir -p .config/rclone
 pushd .config/rclone
 cget rclone.conf
-
-
 
 # change the retroarch directory configuration
 changeconf system_directory '~/retroarch/bios'

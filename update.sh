@@ -2,14 +2,14 @@
 #this updates various retroarch/libretro files
 
 #check if it's a pc
-UNAME=$(uname -m)
-if ! [ "$UNAME" = x86_64]; then
+DEVICE=$(uname -m)
+if ! [ "$DEVICE" = x86_64 ]; then
     echo "this currently only supports x86_64 linux"
     exit
 fi
 
 #check for internet
-if ! curl cht.sh; then
+if curl cht.sh; then
     echo "internet found"
 else
     echo "no internet"
