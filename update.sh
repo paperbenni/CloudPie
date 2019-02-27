@@ -23,7 +23,7 @@ function retroupdate() {
     mkdir -p ~/retroarch/"$1"
     pushd ~/retroarch/"$1"
     wget "$2"
-    unzip *.zip
+    unzip -o *.zip
     rm *.zip
     popd
 }
@@ -43,7 +43,7 @@ mv */*/*/*/*/*.zip ./
 rm -r buildbot*
 
 for zip in *.zip; do
-    unzip "$zip"
+    unzip -o "$zip"
     rm ./"$zip"
 done
 popd
