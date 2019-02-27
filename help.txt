@@ -1,0 +1,7 @@
+Basic usage: cloudrom gamename
+special commands
+
+
+cloudrom help
+cloudrom version
+cloudrom update

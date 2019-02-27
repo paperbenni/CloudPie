@@ -1,14 +1,18 @@
 #!/bin/bash
+function checkscript() {
+    #statements
+    if ! dialog --version; then
+        echo "dialog must be installed in order for this to work"
+        exit
+    fi
 
-if ! dialog --version; then
-    echo "dialog must be installed in order for this to work"
-    exit
-fi
+    if ! curl cht.sh; then
+        echo "you need internet to do this"
+        exit 1
+    fi
+}
 
-if ! curl cht.sh; then
-    echo "you need internet to do this"
-    exit 1
-fi
+checkscript
 
 function mkcd() {
     if ! [ -e "$1" ]; then
@@ -22,6 +26,7 @@ function repoload() {
     # $2 is the repo file name
     # $3 is the system name
     # $4 is the file extension
+    rm "$2".txt
     echo "updating $3 repos"
     curl https://the-eye.eu/public/rom/$1/ >"$2".tmp
     cat "$2".tmp | sed -e 's/.*>\(.*\)<\/a>.*/\1/' >"$2".tmp2
@@ -34,6 +39,10 @@ function repoload() {
 }
 
 function romupdate() {
+    if ! curl cht.sh >/dev/null; then
+        echo "no internet"
+        exit
+    fi
     mkdir -p ~/cloudpie/repos
     pushd ~/cloudpie/repos
 
@@ -67,17 +76,27 @@ function unpack() {
     rm "$1"
 }
 
-#user wants top update or install new game
-if [ "$1" = update ]; then
-    romupdate
-    exit
-else
-    if [ -z "$1" ]; then
-        which game would you like to have?
-        read ROMGAME
+#special commands that are not games
+if [ -z "$1" ]; then
+    case "$1" in
+    update)
+        romupdate
+        ;;
+
+    version)
+        echo "veeery early beta"
+        ;;
+    help)
+        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/help.txt
+        ;;
+    *)
+        EXITTHIS=1
+        ;;
+    esac
+    if [ -z "$EXITTHIS" ]; then
+        exit 0
     else
-        ROMGAME="$1"
-        echo "installing $1"
+        echo "installing game"
     fi
 fi
 
@@ -101,29 +120,21 @@ select console in $(cat platforms.txt); do
     pushd repos
     LINK=$(cat $console.txt | tail -1)
 
-    cat "$console".txt | head -n -1 | agrep -i -2 "$ROMGAME" | head -20 >cache.txt
+    game=$(cat "$console".txt | ~/cloudpie/path/fzf)
+    echo "downloading $game"
 
-    IFS2="$IFS"
-    IFS=$'\n'
-    PS3="Choose from results: "
-    select game in $(cat cache.txt); do
-        echo "downloading $game"
+    pushd "$ROMDIR"
+    mkcd "$console"
+    GAMENAME=${game%.*}
 
-        pushd "$ROMDIR"
-        mkcd "$console"
-        GAMENAME=${game%.*}
+    if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
+        echo "game $GAMENAME already exists"
+    else
+        wget "$LINK$game"
+        unpack "$game"
+    fi
 
-        if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
-            echo "game $GAMENAME already exists"
-        else
-            wget "$LINK$game"
-            unpack "$game"
-        fi
+    popd
 
-        popd
-        rm cache.txt
-        break
-    done
     break
-    IFS="$IFS2"
 done
