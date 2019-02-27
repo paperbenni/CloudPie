@@ -1,4 +1,6 @@
 #!/bin/bash
-rm -rf ~/cloudpie
+cd ~
+rm -rf cloudpie
+rm -rf retroarch
 cd /bin
 sudo rm cloudrom cloudpie

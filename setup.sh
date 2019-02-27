@@ -1,4 +1,7 @@
 #!/bin/bash
+pushd ~
+
+mkdir cloudpie
 
 echo "installing cloudpie"
 
@@ -37,13 +40,13 @@ x86_64)
 
     if apt --version; then
         sudo apt-get update
-        sudo apt install -y git agrep wget p7zip-full
+        sudo apt install -y git agrep wget p7zip-full unrar
         mkdir -p ~/retroarch/retroarch
 
-        pushd ~retroarch/retroarch
-        wget retroarch.surge.sh/retroarch.zip
-        unzip retroarch.zip
-        rm retroarch.zip
+        mkdir -p ~/cloudpie/path
+        rm ~/cloudpie/path/retroarch
+        pushd ~/cloudpie/path
+        wget retroarch.surge.sh/retroarch
         chmod +x retroarch
 
         if ./retroarch --version; then
@@ -52,14 +55,28 @@ x86_64)
             echo "retroarch install failed"
             exit 1
         fi
+
+        #generate new retroarch config files
+        rm -rf ~/.config/retroarch
+
+        timeout 8 ./retroarch
+
         popd
 
         curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/cores.sh | bash
 
         wget https://github.com/ncw/rclone/releases/download/v1.46/rclone-v1.46-linux-amd64.deb
-        mv *.deb rclone.deb
-        sudo dpkg -i -y rclone.deb
-        rm rclone.deb
+        sudo dpkg -i -y *.deb
+        rm *.deb
+
+        # install the fuzzy finder fzf
+        pushd cloudpie/path
+        wget https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz
+        tar zxvf *.tgz
+        rm *.tgz
+        chmod +x ./fzf
+        popd
+
     fi
 
     if pacman --version; then
@@ -88,18 +105,15 @@ pushd retroarch
 mkdir save
 mkdir quicksave
 
-
-
 popd
 
 #update retroarch
-mkdir cloudpie
+
 cd cloudpie
 cget update.sh platforms.txt sync.sh download.sh login.sh start.sh
 chmod +x update.sh sync.sh start.sh download.sh login.sh
 
 bash update.sh
-
 
 cd /bin
 sudo cget cloudrom cloudpie
@@ -110,7 +124,7 @@ mkdir -p .config/rclone
 pushd .config/rclone
 cget rclone.conf
 
-cd ~
+
 
 # change the retroarch directory configuration
 changeconf system_directory '~/retroarch/bios'
@@ -120,7 +134,9 @@ changeconf cheat_database_path '~/retroarch/cheats'
 changeconf libretro_directory '~/retroarch/cores'
 changeconf joypad_autoconfig_dir '~/retroarch/autoconfig'
 changeconf content_database_path = '~/retroarch/database/rdb'
+changeconf menu_driver 'ozone'
 
 clear
 
 ~/cloudpie/login.sh
+popd

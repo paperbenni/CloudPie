@@ -10,7 +10,7 @@ while :; do
     MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
     USERPASSWORD=$(cat ~/cloudpie/password.txt)
     if [ "$MEGAPASSWORD" = "$USERPASSWORD" ]; then
-        rclone mount mega:"$USERNAME/retroarch" ~/retroarch/
+        rclone mount mega:"$USERNAME/retroarch/save" ~/retroarch/save
         sleep 2
     else
         echo "wrong password, type in a new one"
