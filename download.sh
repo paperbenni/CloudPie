@@ -1,12 +1,12 @@
 #!/bin/bash
 function checkscript() {
     #statements
-    if ! dialog --version; then
+    if ! dialog --version >/dev/null; then
         echo "dialog must be installed in order for this to work"
         exit
     fi
 
-    if ! curl cht.sh; then
+    if ! curl cht.sh >/dev/null; then
         echo "you need internet to do this"
         exit 1
     fi
@@ -49,9 +49,8 @@ function romupdate() {
     repoload 'Nintendo%2064/Roms' n64 "Nintendo 64" z64
     repoload 'SNES' snes "Super Nintendo Entertainment System" zip
     repoload 'Playstation/Games/NTSC' psx "Play Station 1" zip
-    repoload 'Nintendo Gameboy Advance' gba "Game Boy Advance" zip
+    repoload 'Nintendo%20Gameboy%20Advance' gba "Game Boy Advance" zip
     repoload 'Nintendo%20DS' ds "Nintendo DS" 7z
-
     popd
 }
 
@@ -64,7 +63,7 @@ function unpack() {
     FILEFORMAT=${1#*.}
     case "$FILEFORMAT" in
     zip)
-        unzip "$1"
+        unzip -o "$1"
         ;;
     7z)
         7za x ./"$1"
@@ -72,12 +71,17 @@ function unpack() {
     rar)
         unrar x "$1"
         ;;
+    *)
+        DONTREMOVE=1
+        ;;
     esac
-    rm "$1"
+    if [ -z "$DONTREMOVE" ]; then
+        rm "$1"
+    fi
 }
 
 #special commands that are not games
-if [ -z "$1" ]; then
+if ! [ -z "$1" ]; then
     case "$1" in
     update)
         romupdate
@@ -100,18 +104,6 @@ if [ -z "$1" ]; then
     fi
 fi
 
-pushd ~/.config/cloudpie
-
-if [ -e rom.conf ]; then
-    ROMDIR=$(cat rom.conf)
-else
-    echo "no rom directory selected falling back to default"
-    ROMDIR="$HOME/cloudpie/roms"
-    mkdir -p ~/cloudpie/roms
-    echo "$HOME/cloudpie/roms" >rom.conf
-fi
-popd
-
 cd ~/cloudpie
 
 echo "for what console would you like your game?"
@@ -121,9 +113,12 @@ select console in $(cat platforms.txt); do
     LINK=$(cat $console.txt | tail -1)
 
     game=$(cat "$console".txt | ~/cloudpie/path/fzf)
+    popd
+
     echo "downloading $game"
 
-    pushd "$ROMDIR"
+    mkdir roms
+    pushd "roms"
     mkcd "$console"
     GAMENAME=${game%.*}
 

@@ -116,7 +116,7 @@ chmod +x update.sh sync.sh start.sh download.sh login.sh
 bash update.sh
 
 cd /bin
-sudo cget cloudrom cloudpie
+sudo cget bin/cloudrom bin/cloudpie
 sudo chmod +x cloudrom cloudpie
 
 cd ~
@@ -133,6 +133,8 @@ changeconf libretro_directory '~/retroarch/cores'
 changeconf joypad_autoconfig_dir '~/retroarch/autoconfig'
 changeconf content_database_path = '~/retroarch/database/rdb'
 changeconf menu_driver 'ozone'
+changeconf assets_directory '~/retroarch/assets/'
+
 
 clear
 
