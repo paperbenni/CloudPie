@@ -36,6 +36,7 @@ retroupdate assets "https://buildbot.libretro.com/assets/frontend/assets.zip"
 retroupdate database "https://buildbot.libretro.com/assets/frontend/database-rdb.zip"
 
 #cores
+rm -rf cores
 mkdir -p ~/retroarch/cores
 pushd ~/retroarch/cores
 wget -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/
