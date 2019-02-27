@@ -6,7 +6,7 @@ function checkscript() {
         exit
     fi
 
-    if ! curl cht.sh >/dev/null; then
+    if ! curl cht.sh &>/dev/null; then
         echo "you need internet to do this"
         exit 1
     fi
@@ -39,7 +39,7 @@ function repoload() {
 }
 
 function romupdate() {
-    if ! curl cht.sh >/dev/null; then
+    if ! curl cht.sh &>/dev/null; then
         echo "no internet"
         exit
     fi

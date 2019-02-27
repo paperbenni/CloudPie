@@ -112,12 +112,12 @@ popd
 cd cloudpie
 cget update.sh platforms.txt sync.sh download.sh login.sh start.sh
 chmod +x update.sh sync.sh start.sh download.sh login.sh
+cget bin/cloudrom bin/cloudpie
+sudo mv cloudrom /bin/
+sudo mv cloudpie /bin/
+sudo chmod +x /bin/cloudrom /bin/cloudpie
 
 bash update.sh
-
-cd /bin
-sudo cget bin/cloudrom bin/cloudpie
-sudo chmod +x cloudrom cloudpie
 
 cd ~
 mkdir -p .config/rclone
@@ -131,9 +131,10 @@ changeconf recording_output_directory '~/retrorecords'
 changeconf cheat_database_path '~/retroarch/cheats'
 changeconf libretro_directory '~/retroarch/cores'
 changeconf joypad_autoconfig_dir '~/retroarch/autoconfig'
-changeconf content_database_path = '~/retroarch/database/rdb'
+changeconf content_database_path = '~/retroarch/database'
 changeconf menu_driver 'ozone'
 changeconf assets_directory '~/retroarch/assets/'
+changeconf libretro_info_path '~/retroarch/info/'
 
 
 clear

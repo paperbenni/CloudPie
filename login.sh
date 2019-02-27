@@ -13,6 +13,7 @@ echo "enter password"
 read PASSWORD
 
 rm username.txt password.txt
+echo "$PASSWORD" >~/cloudpie/password.txt
 
 echo "$USERNAME" >username.txt
 if rclone lsd mega:"$USERNAME" &>/dev/null &&
@@ -27,7 +28,6 @@ if rclone lsd mega:"$USERNAME" &>/dev/null &&
     fi
 else
     echo "user not found, creating new account"
-    echo "$PASSWORD" >~/cloudpie/password.txt
     rclone mkdir mega:"$USERNAME"
     rclone mkdir mega:"$USERNAME"/save
     rclone copy ~/cloudpie/password.txt mega:"$USERNAME/"
