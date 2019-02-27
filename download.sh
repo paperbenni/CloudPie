@@ -1,5 +1,15 @@
 #!/bin/bash
 
+if ! dialog --version; then
+    echo "dialog must be installed in order for this to work"
+    exit
+fi
+
+if ! curl cht.sh; then
+    echo "you need internet to do this"
+    exit 1
+fi
+
 function mkcd() {
     if ! [ -e "$1" ]; then
         mkdir "$1"
@@ -36,6 +46,28 @@ function romupdate() {
     popd
 }
 
+function unpack() {
+    echo "unpacking $1"
+    if ! [ -e "$1" ]; then
+        echo "file not found"
+        exit 1
+    fi
+    FILEFORMAT=${1#*.}
+    case "$FILEFORMAT" in
+    zip)
+        unzip "$1"
+        ;;
+    7z)
+        7za x ./"$1"
+        ;;
+    rar)
+        unrar x "$1"
+        ;;
+    esac
+    rm "$1"
+}
+
+#user wants top update or install new game
 if [ "$1" = update ]; then
     romupdate
     exit
@@ -49,18 +81,15 @@ else
     fi
 fi
 
-if ! dialog --version; then
-    echo "dialog must be installed in order for this to work"
-    exit
-fi
-
 pushd ~/.config/cloudpie
 
 if [ -e rom.conf ]; then
     ROMDIR=$(cat rom.conf)
 else
+    echo "no rom directory selected falling back to default"
     ROMDIR="$HOME/cloudpie/roms"
     mkdir -p ~/cloudpie/roms
+    echo "$HOME/cloudpie/roms" >rom.conf
 fi
 popd
 
@@ -88,17 +117,7 @@ select console in $(cat platforms.txt); do
             echo "game $GAMENAME already exists"
         else
             wget "$LINK$game"
-            if [ "$game" == *".zip" ]; then
-                echo "unpacking game"
-                unzip ./"$game"
-                rm $game
-            fi
-
-            if [ "$game" == *".7z" ]; then
-                echo "unpacking game"
-                7za x ./"$game"
-                rm $game
-            fi
+            unpack "$game"
         fi
 
         popd

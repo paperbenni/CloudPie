@@ -45,6 +45,7 @@ x86_64)
         unzip retroarch.zip
         rm retroarch.zip
         chmod +x retroarch
+
         if ./retroarch --version; then
             echo "retroarch installed successfully"
         else
@@ -78,22 +79,27 @@ function cget() {
 }
 
 pushd ~/
+mkdir -p .config/cloudpie
 
 mkdir retrorecords
 
 mkdir retroarch
 pushd retroarch
-mkdir saves
-mkdir quicksaves
+mkdir save
+mkdir quicksave
 
-cget cores.sh
-bash cores.sh
+
+
 popd
 
-mkdir -p .config/cloudpie
+#update retroarch
 mkdir cloudpie
 cd cloudpie
-cget platforms.txt sync.sh download.sh
+cget update.sh platforms.txt sync.sh download.sh login.sh start.sh
+chmod +x update.sh sync.sh start.sh download.sh login.sh
+
+bash update.sh
+
 
 cd /bin
 sudo cget cloudrom cloudpie
@@ -116,25 +122,5 @@ changeconf joypad_autoconfig_dir '~/retroarch/autoconfig'
 changeconf content_database_path = '~/retroarch/database/rdb'
 
 clear
-cd ~/cloudpie
-echo "what's your username?"
-read USERNAME
-echo "enter password"
-read PASSWORD
 
-echo "$USERNAME" >username.txt
-if rclone lsd mega:"$USERNAME" &>/dev/null; then
-    echo "user exists, checking password"
-    MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
-    if [ "$MEGAPASSWORD" = "$PASSWORD" ]; then
-        echo "login sucessfull"
-        sleep 2
-    else
-        echo "type in the correct password or choose another username please"
-    fi
-else
-    echo "user not found, creating new account"
-    echo "$PASSWORD" >~/cloudpie/password.txt
-    rclone mkdir mega:"$USERNAME"
-    rclone cp ~/cloudpie/password.txt mega:"$USERNAME/password.txt"
-fi
+~/cloudpie/login.sh

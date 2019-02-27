@@ -1,2 +1,2 @@
 #!/bin/sh
-bash ~/cloudpie/sync.sh "$@"
+bash ~/cloudpie/start.sh "$@"
