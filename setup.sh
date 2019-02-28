@@ -3,24 +3,27 @@ pushd ~
 rm -rf cloudpie
 mkdir cloudpie
 
-curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/functions.sh > cloudpie/functions.sh
+curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/functions.sh >cloudpie/functions.sh
 source cloudpie/functions.sh
 
 echo "installing cloudpie"
 
 DEVICE=$(uname -m)
 
-
 case "$DEVICE" in
 armv6l)
     echo "raspberry pi"
-    sudo apt update
-    sudo apt install wget agrep p7zip-full git wget curl
-    wget https://downloads.rclone.org/v1.46/rclone-v1.46-linux-arm64.deb
-    mv *.deb rclone.deb
-    sudo dpkg -i rclone.deb
-    rm rclone.deb
+    if apt --version; then
+        sudo apt update
+        sudo apt install wget agrep p7zip-full git wget curl
+        wget https://downloads.rclone.org/v1.46/rclone-v1.46-linux-arm64.deb
+        mv *.deb rclone.deb
+        sudo dpkg -i rclone.deb
+        rm rclone.deb
+    fi
+
     ;;
+
 x86_64)
     echo "PC"
     echo '~/cloudpie/roms' >~/.config/cloudpie/rom.conf
@@ -28,43 +31,48 @@ x86_64)
     if apt --version; then
         sudo apt-get update
         sudo apt install -y git agrep wget p7zip-full unrar
-        mkdir -p ~/retroarch/retroarch
-
-        mkdir -p ~/cloudpie/path
-        rm ~/cloudpie/path/retroarch
-        pushd ~/cloudpie
-        mkdir save
-        cd path
-        wget retroarch.surge.sh/retroarch
-        wget suckless.surge.sh/st
-        chmod +x retroarch st
-
-        if ./retroarch --version && ./st -version; then
-            echo "retroarch and st installed successfully"
-        else
-            echo "retroarch and st install failed"
-            exit 1
-        fi
-
-        #generate new retroarch config files
-        rm -rf ~/.config/retroarch
-        timeout 8 ./retroarch
-
-        popd
 
         wget https://github.com/ncw/rclone/releases/download/v1.46/rclone-v1.46-linux-amd64.deb
         sudo dpkg -i -y *.deb
         rm *.deb
-
-        # install the fuzzy finder fzf
-        pushd cloudpie/path
-        wget https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz
-        tar zxvf *.tgz
-        rm *.tgz
-        chmod +x ./fzf
-        popd
-
     fi
+
+    if pacman --version; then
+        sudo pacman -Syu
+        sudo pacman -S --noconfirm wget agrep p7zp git wget curl rclone
+    fi
+
+    mkdir -p ~/retroarch/retroarch
+
+    mkdir -p ~/cloudpie/path
+    rm ~/cloudpie/path/retroarch
+    pushd ~/cloudpie
+    mkdir save
+    cd path
+    wget retroarch.surge.sh/retroarch
+    wget suckless.surge.sh/st
+    chmod +x retroarch st
+
+    if ./retroarch --version && ./st -version; then
+        echo "retroarch and st installed successfully"
+    else
+        echo "retroarch and st install failed"
+        exit 1
+    fi
+
+    #generate new retroarch config files
+    rm -rf ~/.config/retroarch
+    timeout 8 ./retroarch
+
+    popd
+
+    # install the fuzzy finder fzf
+    pushd cloudpie/path
+    wget https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz
+    tar zxvf *.tgz
+    rm *.tgz
+    chmod +x ./fzf
+    popd
 
     if pacman --version; then
         curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/packages/arch.txt | sudo pacman -S -
