@@ -3,6 +3,9 @@ pushd ~
 rm -rf cloudpie
 mkdir cloudpie
 
+curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/functions.sh > cloudpie/functions.sh
+source cloudpie/functions.sh
+
 echo "installing cloudpie"
 
 DEVICE=$(uname -m)
@@ -33,12 +36,13 @@ x86_64)
         mkdir save
         cd path
         wget retroarch.surge.sh/retroarch
-        chmod +x retroarch
+        wget suckless.surge.sh/st
+        chmod +x retroarch st
 
-        if ./retroarch --version; then
-            echo "retroarch installed successfully"
+        if ./retroarch --version && ./st -version; then
+            echo "retroarch and st installed successfully"
         else
-            echo "retroarch install failed"
+            echo "retroarch and st install failed"
             exit 1
         fi
 
@@ -47,8 +51,6 @@ x86_64)
         timeout 8 ./retroarch
 
         popd
-
-        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/cores.sh | bash
 
         wget https://github.com/ncw/rclone/releases/download/v1.46/rclone-v1.46-linux-amd64.deb
         sudo dpkg -i -y *.deb
@@ -69,16 +71,6 @@ x86_64)
     fi
     ;;
 esac
-
-function cget() {
-    if [ -z "$1" ]; then
-        echo "usage: cget filename"
-    else
-        for file in "$@"; do
-            wget https://raw.githubusercontent.com/paperbenni/CloudPie/master/"$file"
-        done
-    fi
-}
 
 pushd ~/
 mkdir -p .config/cloudpie

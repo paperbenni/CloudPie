@@ -17,16 +17,7 @@ else
 fi
 
 cd ~
-
-function retroupdate() {
-    rm -rf ~/retroarch/"$1"
-    mkdir -p ~/retroarch/"$1"
-    pushd ~/retroarch/"$1"
-    wget "$2"
-    unzip -o *.zip
-    rm *.zip
-    popd
-}
+source cloudpie/functions.sh
 
 #controller autoconfig
 retroupdate autoconfig "https://buildbot.libretro.com/assets/frontend/autoconfig.zip"
@@ -36,6 +27,8 @@ retroupdate assets "https://buildbot.libretro.com/assets/frontend/assets.zip"
 retroupdate database "https://buildbot.libretro.com/assets/frontend/database-rdb.zip"
 
 retroupdate info "https://buildbot.libretro.com/assets/frontend/info.zip"
+
+retroupdate shaders "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip"
 
 #cores
 rm -rf ~/retroarch/cores

@@ -1,2 +1,2 @@
 #!/bin/sh
-st -e sh -c 'bash ~/cloudpie/download.sh "$@"'
+$HOME/cloudpie/path/st -e sh -c "$HOME/cloudpie/download.sh \"$@\""
