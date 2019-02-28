@@ -18,6 +18,9 @@ function openrom() {
     snes)
         retro "snes9x_libretro" "$1"
         ;;
+    psx)
+        retro "mednafen_psx_libretro" "$1"
+        ;;
     *)
         echo "no core found for $2"
         ;;

@@ -1,2 +1,2 @@
-#!/bin/bash
-st -e "~/cloudpie/play.sh"
+#!/bin/sh
+st -e sh -c '~/cloudpie/play.sh'
