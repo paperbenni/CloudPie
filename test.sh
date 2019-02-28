@@ -5,3 +5,4 @@ cp *.sh ~/cloudpie/
 chmod +x ~/cloudpie/*.sh
 chmod +x bin/*
 sudo cp bin/* /bin
+cp formats.txt ~/cloudpie/

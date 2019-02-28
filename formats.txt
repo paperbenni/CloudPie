@@ -1,0 +1,6 @@
+n64:n64
+n64:z64
+psx:cue
+snes:smc
+gba:gba
+ds:ds
