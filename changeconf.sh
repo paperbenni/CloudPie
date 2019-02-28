@@ -2,7 +2,7 @@
 
 source ~/cloudpie/functions.sh
 
-if ! ~/cloudpie/path/retroarch; then
+if ! ~/cloudpie/path/retroarch --version; then
     echo "retroarch not installed"
     exit
 fi

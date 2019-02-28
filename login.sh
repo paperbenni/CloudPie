@@ -30,6 +30,9 @@ else
     echo "user not found, creating new account"
     rclone mkdir mega:"$USERNAME"
     rclone mkdir mega:"$USERNAME"/save
+    echo "cloud" >cloud.txt
+    rclone copy cloud.txt mega:"$USERNAME/save/"
+    rm cloud.txt
     rclone copy ~/cloudpie/password.txt mega:"$USERNAME/"
 fi
 

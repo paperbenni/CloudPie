@@ -133,3 +133,5 @@ select console in $(cat platforms.txt); do
 
     break
 done
+echo "enjoy the game!"
+sleep 3

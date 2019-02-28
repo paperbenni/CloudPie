@@ -9,6 +9,15 @@ if ! rclone --version; then
     exit
 fi
 
+pushd ~/cloudpie/save
+if [ -e cloud.txt ]; then
+    echo "already connected"
+    exit
+else
+    echo "no existing connection found"
+fi
+popd
+
 USERNAME=$(cat ~/cloudpie/username.txt)
 while :; do
     echo "checking password for $USERNAME"
