@@ -3,27 +3,37 @@ source ~/cloudpie/functions.sh
 
 PS3="what platform does your game run on?"
 
-pushd ~/cloudpie/roms
-rm formatcache.txt &> /dev/null
-select PLATFORM in $(ls); do
-    echo "$PLATFORM"
-    pushd "$PLATFORM"
-
-    while read p; do
-        if echo "$p" | grep "$PLATFORM"; then
-            FILEENDING=${p##*:}
-            ls *.$FILEENDING >>formatcache.txt
-        fi
-    done <~/cloudpie/formats.txt
-
-    GAME=$(cat formatcache.txt | ~/cloudpie/path/fzf)
-    rm formatcache.txt
-    if [ -z "$GAME" ]; then
-        echo "operation canceled"
-        exit 0
-        break
+if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
+    ~/cloudpie/sync.sh &
+    sleep 10
+    pushd ~/cloudpie/save
+    if ! [ -e cloud.txt ]; then
+        echo "connection to the internet failed, closing app to avoid data loss"
+        exit
     fi
-    echo "starting $GAME"
-    openrom "$HOME/cloudpie/roms/$PLATFORM/$GAME" "$PLATFORM"
+    popd
+fi
+
+pushd ~/cloudpie/roms
+rm formatcache.txt &>/dev/null
+PLATFORM=$(ls | ~/cloudpie/path/fzf)
+echo "$PLATFORM"
+pushd "$PLATFORM"
+
+while read p; do
+    if echo "$p" | grep "$PLATFORM"; then
+        FILEENDING=${p##*:}
+        ls *.$FILEENDING >>formatcache.txt
+    fi
+done <~/cloudpie/formats.txt
+
+GAME=$(cat formatcache.txt | ~/cloudpie/path/fzf)
+rm formatcache.txt
+if [ -z "$GAME" ]; then
+    echo "operation canceled"
+    exit 0
     break
-done
+fi
+echo "starting $GAME"
+openrom "$HOME/cloudpie/roms/$PLATFORM/$GAME" "$PLATFORM"
+break

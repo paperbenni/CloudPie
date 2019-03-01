@@ -108,30 +108,31 @@ cd ~/cloudpie
 
 echo "for what console would you like your game?"
 PS3="Select platform: "
-select console in $(cat platforms.txt); do
-    pushd repos
-    LINK=$(cat $console.txt | tail -1)
 
-    game=$(cat "$console".txt | ~/cloudpie/path/fzf)
-    popd
+console=$(cat platforms.txt | ~/cloudpie/path/fzf)
+pushd repos
+LINK=$(cat $console.txt | tail -1)
 
-    echo "downloading $game"
+game=$(cat "$console".txt | ~/cloudpie/path/fzf)
+popd
 
-    mkdir roms
-    pushd "roms"
-    mkcd "$console"
-    GAMENAME=${game%.*}
+echo "downloading $game"
 
-    if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
-        echo "game $GAMENAME already exists"
-    else
-        wget "$LINK$game"
-        unpack "$game"
-    fi
+mkdir roms
+pushd "roms"
+mkcd "$console"
+GAMENAME=${game%.*}
 
-    popd
+if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
+    echo "game $GAMENAME already exists"
+else
+    wget "$LINK$game"
+    unpack "$game"
+fi
 
-    break
-done
+popd
+
+break
+
 echo "enjoy the game!"
 sleep 3
