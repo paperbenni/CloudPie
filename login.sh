@@ -16,8 +16,7 @@ rm username.txt password.txt
 echo "$PASSWORD" >~/cloudpie/password.txt
 
 echo "$USERNAME" >username.txt
-if rclone lsd mega:"$USERNAME" &>/dev/null &&
-    rclone cat mega:"$USERNAME"/password.txt; then
+if rclone lsd mega:"$USERNAME"; then
     echo "user exists, checking password"
     MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
     if [ "$MEGAPASSWORD" = "$PASSWORD" ]; then

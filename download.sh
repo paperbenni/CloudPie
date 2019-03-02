@@ -132,7 +132,6 @@ fi
 
 popd
 
-break
 
 echo "enjoy the game!"
 sleep 3

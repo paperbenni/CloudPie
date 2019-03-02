@@ -6,7 +6,7 @@ if ! ~/cloudpie/path/retroarch --version; then
     echo "retroarch not installed"
     exit
 fi
-
+rm -rf ~/.config/retroarch
 # change the retroarch directory configuration
 changeconf system_directory "~/retroarch/bios"
 changeconf savefile_directory "~/cloudpie/save"

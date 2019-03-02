@@ -30,7 +30,7 @@ x86_64)
 
     if apt --version; then
         sudo apt-get update
-        sudo apt install -y git agrep wget p7zip-full unrar
+        sudo apt install -y git agrep wget p7zip-full unrar libcg
 
         wget https://github.com/ncw/rclone/releases/download/v1.46/rclone-v1.46-linux-amd64.deb
         sudo dpkg -i -y *.deb
@@ -53,7 +53,7 @@ x86_64)
     wget suckless.surge.sh/st
     chmod +x retroarch st
 
-    if ./retroarch --version && ./st -version; then
+    if ./retroarch --version; then
         echo "retroarch and st installed successfully"
     else
         echo "retroarch and st install failed"
