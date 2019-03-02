@@ -46,7 +46,7 @@ x86_64)
 
     mkdir -p ~/cloudpie/path
     rm ~/cloudpie/path/retroarch
-    pushd ~/cloudpie
+    pushd ~/cloudpie || exit
     mkdir save
     cd path
     wget retroarch.surge.sh/retroarch
@@ -94,12 +94,15 @@ popd
 #update retroarch
 
 cd cloudpie
-cget update.sh platforms.txt sync.sh download.sh login.sh start.sh changeconf.sh
-chmod +x update.sh sync.sh start.sh download.sh login.sh
-cget bin/cloudrom bin/cloudpie
+cget play.sh update.sh platforms.txt sync.sh download.sh login.sh start.sh changeconf.sh
+chmod +x *.sh
+cget bin/cloudrom bin/cloudpie bin/retroplay
+sudo mv retroplay /bin/
 sudo mv cloudrom /bin/
 sudo mv cloudpie /bin/
-sudo chmod +x /bin/cloudrom /bin/cloudpie
+sudo chmod +x /bin/cloudrom /bin/cloudpie /bin/retroplay
+
+cget formats.txt
 
 bash update.sh
 

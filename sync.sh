@@ -9,14 +9,12 @@ if ! rclone --version; then
     exit
 fi
 
-pushd ~/cloudpie/save
-if [ -e cloud.txt ]; then
+if [ -e $HOME/cloudpie/cloud.txt ]; then
     echo "already connected"
     exit
 else
     echo "no existing connection found"
 fi
-popd
 
 USERNAME=$(cat ~/cloudpie/username.txt)
 while :; do
@@ -25,7 +23,9 @@ while :; do
     USERPASSWORD=$(cat ~/cloudpie/password.txt)
     if [ "$MEGAPASSWORD" = "$USERPASSWORD" ]; then
         echo "passowrd correct"
-        rm -rf ~/cloudpie/save
+        if ! [ -e $HOME/cloudpie/save/cloud.txt ]; then
+            rm -rf ~/cloudpie/save
+        fi
         mkdir -p ~/cloudpie/save
         sleep 1
         echo "mounting saves for $USERNAME"

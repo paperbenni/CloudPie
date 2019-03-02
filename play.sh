@@ -4,6 +4,7 @@ source ~/cloudpie/functions.sh
 PS3="what platform does your game run on?"
 
 if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
+    echo "no existing connection found"
     ~/cloudpie/sync.sh &
     sleep 10
     pushd ~/cloudpie/save
