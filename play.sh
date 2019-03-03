@@ -17,7 +17,10 @@ fi
 
 pushd ~/cloudpie/roms
 rm formatcache.txt &>/dev/null
+
 PLATFORM=$(ls | ~/cloudpie/path/fzf)
+zerocheck "$PLATFORM"
+
 echo "$PLATFORM"
 pushd "$PLATFORM"
 
@@ -29,7 +32,10 @@ while read p; do
 done <~/cloudpie/formats.txt
 
 GAME=$(cat formatcache.txt | ~/cloudpie/path/fzf)
+zerocheck "$GAME"
+
 rm formatcache.txt
+
 if [ -z "$GAME" ]; then
     echo "operation canceled"
     exit 0

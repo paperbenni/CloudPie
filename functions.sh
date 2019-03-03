@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-
+function zerocheck() {
+    if [ -z "$1" ]; then
+        exit
+    fi
+}
 
 function changeconf() {
     if [ -z "$2" ]; then
@@ -27,7 +31,6 @@ function cget() {
         done
     fi
 }
-
 
 function retroupdate() {
     rm -rf ~/retroarch/"$1"

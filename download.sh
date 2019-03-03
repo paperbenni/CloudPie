@@ -1,4 +1,7 @@
 #!/bin/bash
+
+source ~/cloudpie/functions.sh
+
 function checkscript() {
     #statements
     if ! dialog --version >/dev/null; then
@@ -78,7 +81,7 @@ function unpack() {
         echo "file not found"
         exit 1
     fi
-    FILEFORMAT=${1#*.}
+    FILEFORMAT=${1##*.}
     case "$FILEFORMAT" in
     zip)
         unzip -o "$1"
@@ -128,11 +131,14 @@ echo "for what console would you like your game?"
 PS3="Select platform: "
 
 console=$(cat platforms.txt | ~/cloudpie/path/fzf)
+zerocheck "$console"
 
 pushd repos
 LINK=$(cat $console.txt | tail -1)
 
 game=$(cat "$console".txt | ~/cloudpie/path/fzf)
+zerocheck "$game"
+
 popd
 
 echo "downloading $game"
