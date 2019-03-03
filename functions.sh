@@ -59,7 +59,7 @@ function openrom() {
         retro "snes9x_libretro" "$1"
         ;;
     psx)
-        retro "mednafen_psx_libretro" "$1"
+        retro "pcsx_rearmed_libretro" "$1"
         ;;
     gba)
         retro "vbam_libretro" "$1"

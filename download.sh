@@ -29,9 +29,27 @@ function repoload() {
     rm "$2".txt
     echo "updating $3 repos"
     curl https://the-eye.eu/public/rom/$1/ >"$2".tmp
-    cat "$2".tmp | sed -e 's/.*>\(.*\)<\/a>.*/\1/' >"$2".tmp2
-    cat "$2".tmp2 | grep ".$4" >"$2".txt
-    rm "$2".tmp2
+    urldecode() {
+        : "${*//+/ }"
+        echo -e "${_//%/\\x}"
+    }
+
+    getlink() {
+        NOPREFIX=${1#*\<a href=\"}
+        NOSUFFIX=${NOPREFIX%\">*\</a\>*}
+        echo "$NOSUFFIX"
+    }
+
+    while read p; do
+        if ! echo "$p" | grep '<a href="'; then
+            continue
+        fi
+        if echo "$p" | grep 'https://'; then
+            continue
+        fi
+        urldecode $(getlink "$p") >>"$2".txt
+    done <"$2".tmp
+
     rm "$2".tmp
     echo "https://the-eye.eu/public/rom/$1/" >>"$2".txt
     sleep 1
@@ -110,6 +128,7 @@ echo "for what console would you like your game?"
 PS3="Select platform: "
 
 console=$(cat platforms.txt | ~/cloudpie/path/fzf)
+
 pushd repos
 LINK=$(cat $console.txt | tail -1)
 
@@ -131,7 +150,6 @@ else
 fi
 
 popd
-
 
 echo "enjoy the game!"
 sleep 3
