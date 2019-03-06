@@ -22,7 +22,7 @@ while :; do
     MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
     USERPASSWORD=$(cat ~/cloudpie/password.txt)
     if [ "$MEGAPASSWORD" = "$USERPASSWORD" ]; then
-        echo "passowrd correct"
+        echo "password correct"
         if ! [ -e $HOME/cloudpie/save/cloud.txt ]; then
             rm -rf ~/cloudpie/save
         fi

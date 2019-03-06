@@ -23,7 +23,9 @@ if rclone lsd mega:"$USERNAME"; then
         echo "login sucessfull"
         sleep 2
     else
-        echo "type in the correct password or choose another username please"
+        echo "wrong password"
+        sleep 2
+        exit 1
     fi
 else
     echo "user not found, creating new account"
