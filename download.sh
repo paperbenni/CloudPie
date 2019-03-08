@@ -2,6 +2,19 @@
 
 source ~/cloudpie/functions.sh
 
+pb() {
+    if [ -z "$@" ]; then
+        echo "usage: pb bashfile"
+    fi
+    for FILE in "$@"; do
+        curl "https://raw.githubusercontent.com/paperbenni/bash/master/$1" >temp.sh
+        source temp.sh
+        rm temp.sh
+    done
+}
+
+pb proton/proton.sh
+
 function checkscript() {
     #statements
     if ! dialog --version >/dev/null; then
@@ -151,7 +164,11 @@ GAMENAME=${game%.*}
 if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
     echo "game $GAMENAME already exists"
 else
+    echo "activating vpn"
+    proton
+    sleep 2
     wget "$LINK$game"
+    sudo pvpn -d
     unpack "$game"
 fi
 
