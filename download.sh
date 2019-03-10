@@ -165,7 +165,7 @@ if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
     echo "game $GAMENAME already exists"
 else
     echo "activating vpn"
-    proton
+    sudo proton
     sleep 2
     wget "$LINK$game"
     sudo pvpn -d
