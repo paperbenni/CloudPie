@@ -167,7 +167,7 @@ else
     echo "activating vpn"
     proton
     sleep 2
-    wget "$LINK$game"
+    wget "$LINK$game" -q --show-progress
     sudo pvpn -d
     unpack "$game"
 fi

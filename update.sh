@@ -34,7 +34,7 @@ retroupdate shaders "https://buildbot.libretro.com/assets/frontend/shaders_glsl.
 rm -rf ~/retroarch/cores
 mkdir -p ~/retroarch/cores
 pushd ~/retroarch/cores
-wget -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/
+wget -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/ -q --show-progress
 mv */*/*/*/*/*.zip ./
 rm -r buildbot*
 rm index.html
