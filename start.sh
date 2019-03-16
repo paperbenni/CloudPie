@@ -12,4 +12,4 @@ if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
     popd
 fi
 
-~/cloudpie/path/retroarch
+retroarch
