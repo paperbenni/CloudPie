@@ -1,18 +1,8 @@
 #!/bin/bash
 
-source ~/cloudpie/functions.sh
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 
-pb() {
-    if [ -z "$@" ]; then
-        echo "usage: pb bashfile"
-    fi
-    for FILE in "$@"; do
-        curl "https://raw.githubusercontent.com/paperbenni/bash/master/$1" >temp.sh
-        source temp.sh
-        rm temp.sh
-    done
-}
-
+pb cloudpie/cloudpie.sh
 pb proton/proton.sh
 
 function checkscript() {

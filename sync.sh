@@ -1,4 +1,9 @@
 #!/bin/bash
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+
+pb rclone/rclone.sh
+pb rclone/login.sh
+
 if pgrep rclone >/dev/null; then
     echo "rclone already running!"
     exit
@@ -16,24 +21,18 @@ else
     echo "no existing connection found"
 fi
 
-USERNAME=$(cat ~/cloudpie/username.txt)
-while :; do
-    echo "checking password for $USERNAME"
-    MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
-    USERPASSWORD=$(cat ~/cloudpie/password.txt)
-    if [ "$MEGAPASSWORD" = "$USERPASSWORD" ]; then
-        echo "password correct"
-        if ! [ -e $HOME/cloudpie/save/cloud.txt ]; then
-            rm -rf ~/cloudpie/save
-        fi
-        mkdir -p ~/cloudpie/save
-        sleep 1
-        echo "mounting saves for $USERNAME"
-        rclone mount mega:"$USERNAME/save" ~/cloudpie/save
-        sleep 5m
+if ! rlogin cloudpie "$(cat ~/cloudpie/username.txt)" "$(cat ~/cloudpie/password.txt)"; then
+    echo "mega login failed"
+    exit 1
+fi
 
-        sleep 2
-    else
-        echo "wrong password, type in a new one"
+while :; do
+    if ! [ -e $HOME/cloudpie/save/cloud.txt ]; then
+        rm -rf ~/cloudpie/save
     fi
+    mkdir -p ~/cloudpie/save
+    sleep 1
+    echo "mounting saves for $USERNAME"
+    rmount saves ~/cloudpie/save
+    sleep 2
 done

@@ -1,6 +1,9 @@
 #!/bin/bash
 #this updates various retroarch/libretro files
 
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb cloudpie/cloudpie.sh
+
 #check if it's a pc
 DEVICE=$(uname -m)
 if ! [ "$DEVICE" = x86_64 ]; then
@@ -17,7 +20,6 @@ else
 fi
 
 cd ~
-source cloudpie/functions.sh
 
 #controller autoconfig
 retroupdate autoconfig "https://buildbot.libretro.com/assets/frontend/autoconfig.zip"
@@ -36,8 +38,9 @@ mkdir -p ~/retroarch/cores
 pushd ~/retroarch/cores
 wget -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/ -q --show-progress
 mv */*/*/*/*/*.zip ./
-rm -r buildbot*
+rm -rf buildbot*
 rm index.html
+
 for zip in *.zip; do
     unzip -o "$zip"
     rm ./"$zip"

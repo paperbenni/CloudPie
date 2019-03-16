@@ -1,5 +1,6 @@
 #!/bin/bash
-source ~/cloudpie/functions.sh
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb cloudpie/cloudpie.sh
 
 PS3="what platform does your game run on?"
 
@@ -43,4 +44,4 @@ if [ -z "$GAME" ]; then
 fi
 echo "starting $GAME"
 openrom "$HOME/cloudpie/roms/$PLATFORM/$GAME" "$PLATFORM"
-break
+echo "hope you had fun"

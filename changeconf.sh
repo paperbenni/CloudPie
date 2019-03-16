@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-source ~/cloudpie/functions.sh
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb cloudpie/cloudpie.sh
 
 if ! ~/cloudpie/path/retroarch --version; then
     echo "retroarch not installed"

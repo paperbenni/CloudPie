@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
+
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb rclone/login.sh
+
 if ! rclone --version; then
     echo "you need rclone >= 1.46 installed"
+    exit
 fi
 
 mkdir -p ~/cloudpie
@@ -14,27 +19,8 @@ read PASSWORD
 
 rm username.txt password.txt
 echo "$PASSWORD" >~/cloudpie/password.txt
+echo "$USERNAME" >~/cloudpie/username.txt
 
-echo "$USERNAME" >username.txt
-if rclone lsd mega:"$USERNAME"; then
-    echo "user exists, checking password"
-    MEGAPASSWORD=$(rclone cat mega:"$USERNAME"/password.txt)
-    if [ "$MEGAPASSWORD" = "$PASSWORD" ]; then
-        echo "login sucessfull"
-        sleep 2
-    else
-        echo "wrong password"
-        sleep 2
-        exit 1
-    fi
-else
-    echo "user not found, creating new account"
-    rclone mkdir mega:"$USERNAME"
-    rclone mkdir mega:"$USERNAME"/save
-    echo "cloud" >cloud.txt
-    rclone copy cloud.txt mega:"$USERNAME/save/"
-    rm cloud.txt
-    rclone copy ~/cloudpie/password.txt mega:"$USERNAME/"
-fi
+rlogin cloudpie "$USERNAME" "$PASSWORD"
 
 popd
