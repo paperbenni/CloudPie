@@ -90,11 +90,12 @@ else
     echo "skipping cores"
 fi
 
+bash changeconf.sh
+
 cd ~/cloudpie/path
 wget suckless.surge.sh/st
 chmod +x st
 
-bash changeconf.sh
 
 cd ~
 
