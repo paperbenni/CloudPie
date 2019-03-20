@@ -21,6 +21,16 @@ else
     echo "no existing connection found"
 fi
 
+if ! [ -e ~/cloudpie/username.txt ] || ! [ -e ~/cloudpie/username.txt ]; then
+    echo "please login first"
+    echo "username"
+    read CPNAME
+    echo "password"
+    read CPPASS
+    echo "$CPNAME" >~/cloudpie/username.txt
+    echo "$CPPASS" >~/cloudpie/password.txt
+fi
+
 if ! rclogin cloudpie "$(cat ~/cloudpie/username.txt)" "$(cat ~/cloudpie/password.txt)"; then
     echo "mega login failed"
     exit 1

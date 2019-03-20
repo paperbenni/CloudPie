@@ -31,11 +31,11 @@ x86_64)
     echo '~/cloudpie/roms' >~/.config/cloudpie/rom.conf
 
     if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
-        sudo add-apt-repository ppa:libretro/stable
+        sudo add-apt-repository ppa:libretro/testing
     fi
 
     pinstall wget agrep p7zip-full:p7zip wget retroarch curl unrar libcg
-    curl https://rclone.org/install.sh | sudo bash
+    rclone --version || curl https://rclone.org/install.sh | sudo bash
 
     mkdir -p ~/retroarch/retroarch
 
@@ -104,7 +104,5 @@ pushd .config/rclone
 if ! cat rclone.conf | grep 'cloudpie'; then
     curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/rclone.conf >>rclone.conf
 fi
-
-~/cloudpie/login.sh
 
 popd
