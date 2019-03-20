@@ -21,6 +21,6 @@ rm username.txt password.txt
 echo "$PASSWORD" >~/cloudpie/password.txt
 echo "$USERNAME" >~/cloudpie/username.txt
 
-rlogin cloudpie "$USERNAME" "$PASSWORD"
+rclogin cloudpie "$USERNAME" "$PASSWORD"
 
 popd

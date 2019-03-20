@@ -21,7 +21,7 @@ else
     echo "no existing connection found"
 fi
 
-if ! rlogin cloudpie "$(cat ~/cloudpie/username.txt)" "$(cat ~/cloudpie/password.txt)"; then
+if ! rclogin cloudpie "$(cat ~/cloudpie/username.txt)" "$(cat ~/cloudpie/password.txt)"; then
     echo "mega login failed"
     exit 1
 fi
@@ -32,7 +32,7 @@ while :; do
     fi
     mkdir -p ~/cloudpie/save
     sleep 1
-    echo "mounting saves for $USERNAME"
-    rmount saves ~/cloudpie/save
+    echo "mounting saves for $RNAME"
+    rmount save ~/cloudpie/save
     sleep 2
 done

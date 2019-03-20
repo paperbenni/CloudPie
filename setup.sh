@@ -84,16 +84,15 @@ sudo chmod +x /bin/cloudrom /bin/cloudpie /bin/retroplay
 
 cget formats.txt
 
-cd ~/cloudpie/path
-wget suckless.surge.sh/st
-chmod +x retroarch st
-
 if ! [ "$1" = "nocores" ]; then
     bash update.sh
-
 else
     echo "skipping cores"
 fi
+
+cd ~/cloudpie/path
+wget suckless.surge.sh/st
+chmod +x st
 
 bash changeconf.sh
 
@@ -101,9 +100,11 @@ cd ~
 
 mkdir -p .config/rclone
 pushd .config/rclone
-cget rclone.conf
 
-clear
+if ! cat rclone.conf | grep 'cloudpie'; then
+    curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/rclone.conf >>rclone.conf
+fi
 
 ~/cloudpie/login.sh
+
 popd
