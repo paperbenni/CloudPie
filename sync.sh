@@ -21,10 +21,16 @@ else
     echo "no existing connection found"
 fi
 
-if ! rclogin cloudpie
-    echo "mega login failed"
-    exit 1
-fi
+
+rclogin cloudpie
+
+pushd .
+
+while ! cd ~/cloudpie/save; do
+    echo "unmounting saves"
+    sudo umount ~/cloudpie/save
+    sleep 2
+done
 
 while :; do
     if ! [ -e $HOME/cloudpie/save/cloud.txt ]; then
@@ -33,6 +39,11 @@ while :; do
     mkdir -p ~/cloudpie/save
     sleep 1
     echo "mounting saves for $RNAME"
+    rclone lsd "$RCLOUD:$RNAME"/save || rclone mkdir "$RCLOUD:$RNAME"/save
+    rclone cat "$RCLOUD:$RNAME"/save/cloud.txt || rclone touch "$RCLOUD:$RNAME"/save/cloud.txt
     rmount save ~/cloudpie/save
     sleep 2
 done
+
+pkill rclone.sh
+pkill sync.sh

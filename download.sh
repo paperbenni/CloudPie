@@ -128,6 +128,10 @@ if ! [ -z "$1" ]; then
     fi
 fi
 
+if ! [ -e ~/cloudpie/repos/n64.txt ]; then
+    romupdate
+fi
+
 cd ~/cloudpie
 
 echo "for what console would you like your game?"
@@ -155,7 +159,7 @@ if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
     echo "game $GAMENAME already exists"
 else
     echo "activating vpn"
-    sudo proton
+    proton
     sleep 2
     wget "$LINK$game" -q --show-progress
     sudo pvpn -d
