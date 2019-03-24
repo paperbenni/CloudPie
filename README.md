@@ -5,10 +5,10 @@ It's not stable or fully functional yet, contributions are always welcome!
 
 ## Install
 ```
-curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/setup.sh | bash
+curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/setup.sh | bash
 ```
 
 ## Uninstall
 ```
-curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
+curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
 ```

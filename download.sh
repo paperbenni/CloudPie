@@ -35,6 +35,8 @@ function repoload() {
     rm "$2".txt
     echo "updating $3 repos"
     curl https://the-eye.eu/public/rom/$1/ >"$2".tmp
+
+    #decodes spaces and other characters from html links
     urldecode() {
         : "${*//+/ }"
         echo -e "${_//%/\\x}"
@@ -47,16 +49,21 @@ function repoload() {
     }
 
     while read p; do
-        if ! echo "$p" | grep '<a href="'; then
+        # download links are <a> objects
+        if ! echo "$p" | grep -q '<a href="'; then
             continue
         fi
-        if echo "$p" | grep 'https://'; then
+
+        # filter out links like the discord of contact info
+        if echo "$p" | grep -q 'https://'; then
             continue
         fi
         urldecode $(getlink "$p") >>"$2".txt
     done <"$2".tmp
 
     rm "$2".tmp
+
+    # add the link prefix as the last line
     echo "https://the-eye.eu/public/rom/$1/" >>"$2".txt
     sleep 1
 

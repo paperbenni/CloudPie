@@ -4,12 +4,11 @@ echo "starting CloudPie"
 if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
     ~/cloudpie/sync.sh &
     sleep 10
-    pushd ~/cloudpie/save
-    if ! [ -e cloud.txt ]; then
-        echo "connection to the internet failed, closing app to avoid data loss"
-        exit
-    fi
-    popd
+    while ! [ -e ~/cloudpie/save/cloud.txt ]; do
+        echo "waiting for cloud saves"
+        sleep 2
+    done
+
 fi
 
 retroarch

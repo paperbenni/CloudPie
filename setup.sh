@@ -102,7 +102,8 @@ cd ~
 mkdir -p .config/rclone
 pushd .config/rclone
 
-if ! cat rclone.conf | grep 'cloudpie'; then
+if ! cat rclone.conf | grep '[cloudpie]'; then
+    echo "adding mega storage"
     curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/rclone.conf >>rclone.conf
 fi
 

@@ -21,14 +21,16 @@ else
     echo "no existing connection found"
 fi
 
-
 rclogin cloudpie
 
 pushd .
 
 while ! cd ~/cloudpie/save; do
     echo "unmounting saves"
-    sudo umount ~/cloudpie/save
+    if ! sudo umount ~/cloudpie/save; then
+        sudo umount -l ~/cloudpie/save
+    fi
+
     sleep 2
 done
 
