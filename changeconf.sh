@@ -7,6 +7,7 @@ if ! retroarch --version; then
     echo "retroarch not installed"
     exit
 fi
+
 rm -rf ~/.config/retroarch
 # change the retroarch directory configuration
 changeconf system_directory "~/retroarch/bios"
@@ -27,9 +28,15 @@ changeconf input_exit_emulator_axis "nul"
 changeconf input_exit_emulator_btn "nul"
 changeconf input_exit_emulator_mbtn "nul"
 changeconf video_fullscreen "true"
-changeconf audio_enable "true"
 changeconf audio_enable_menu "true"
 changeconf audio_enable_menu_bgm "true"
 changeconf audio_enable_menu_cancel "true"
 changeconf audio_enable_menu_notice "true"
 changeconf audio_enable_menu_ok "true"
+changeconf input_reset "nul"
+changeconf changeconf input_rewind "nul"
+changeconf input_movie_record_toggle "nul"
+changeconf input_desktop_menu_toggle "nul"
+changeconf input_pause_toggle "nul"
+
+

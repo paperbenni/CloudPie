@@ -3,6 +3,7 @@
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie/cloudpie.sh
+pb mediafire/mediafire.sh
 
 #check if it's a pc
 DEVICE=$(uname -m)
@@ -45,6 +46,9 @@ for zip in *.zip; do
     unzip -o "$zip"
     rm ./"$zip"
 done
-popd
 
+rm mupen64plus_libretro.so
+mediafire http://www.mediafire.com/file/ffqxjfvuxz8w12s/mupen64plus_libretro.so
+
+popd
 echo "done updating"

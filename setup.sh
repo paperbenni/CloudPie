@@ -94,8 +94,8 @@ bash changeconf.sh
 
 cd ~/cloudpie/path
 wget suckless.surge.sh/st
-chmod +x st
-
+wget roverfile.surge.sh/rover
+chmod +x st rover
 
 cd ~
 
