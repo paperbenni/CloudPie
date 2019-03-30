@@ -1,7 +1,4 @@
 #!/bin/bash
-pushd ~
-rm -rf cloudpie
-mkdir cloudpie
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie/cloudpie.sh
@@ -34,7 +31,7 @@ x86_64)
         sudo add-apt-repository ppa:libretro/testing
     fi
 
-    pinstall wget agrep p7zip-full:p7zip wget retroarch curl unrar libcg
+    pinstall wget agrep p7zip-full:p7zip wget retroarch curl unrar libcg dialog openvpn python
     rclone --version || curl https://rclone.org/install.sh | sudo bash
 
     mkdir -p ~/retroarch/retroarch
@@ -60,7 +57,26 @@ x86_64)
     ;;
 esac
 
-pushd ~/
+pushd ~
+
+dialog --title "install location" \
+    --backtitle "please choose a directory somewhere in your HOME" \
+    --yesno "Would you like to set a custom install directory?" 7 60
+
+response=$?
+case $response in
+0)
+    echo "use vim keys (jkl) to move around and press q when in your install folder"
+    sleep 10
+    wget roverfile.surge.sh/rover
+    chmod +x st rover
+    rover -d destination
+    ;;
+*) echo "Using default directory ~/cloudpie" ;;
+esac
+
+rm -rf cloudpie
+mkdir cloudpie
 mkdir -p .config/cloudpie
 
 mkdir retrorecords

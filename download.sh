@@ -144,13 +144,13 @@ cd ~/cloudpie
 echo "for what console would you like your game?"
 PS3="Select platform: "
 
-console=$(cat platforms.txt | ~/cloudpie/path/fzf)
+console=$( ~/cloudpie/path/fzf < platforms.txt)
 zerocheck "$console"
 
 pushd repos
-LINK=$(cat $console.txt | tail -1)
+LINK=$(tail -1 < $console.txt)
 
-game=$(cat "$console".txt | ~/cloudpie/path/fzf)
+game=$(~/cloudpie/path/fzf < "$console".txt)
 zerocheck "$game"
 
 popd
