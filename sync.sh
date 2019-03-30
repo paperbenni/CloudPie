@@ -1,5 +1,6 @@
 #!/bin/bash
-source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh) || exit
 
 pb rclone/rclone.sh
 pb rclone/login.sh
@@ -21,7 +22,11 @@ else
     echo "no existing connection found"
 fi
 
-rclogin cloudpie
+if ! rclogin cloudpie
+then
+  echo "please enter the right password or change account"
+  exit 1
+fi
 
 pushd .
 

@@ -17,13 +17,13 @@ pb cloudpie/cloudpie.sh
 pb install/install.sh
 pb unpack/unpack.sh
 
-echo '~/cloudpie/roms' >~/.config/cloudpie/rom.conf
+echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 
 if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
     sudo add-apt-repository ppa:libretro/testing
 fi
 
-pinstall wget agrep p7zip-full:p7zip wget retroarch curl unrar libcg
+pinstall wget expect agrep p7zip-full:p7zip wget retroarch curl unrar libcg
 rclone --version || curl https://rclone.org/install.sh | sudo bash
 
 rm -rf .config/retroarch
@@ -61,7 +61,7 @@ fi
 
 bash changeconf.sh
 
-cd ~
+cd
 
 mkdir -p .config/rclone
 cd .config/rclone

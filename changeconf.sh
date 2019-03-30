@@ -38,5 +38,4 @@ changeconf changeconf input_rewind "nul"
 changeconf input_movie_record_toggle "nul"
 changeconf input_desktop_menu_toggle "nul"
 changeconf input_pause_toggle "nul"
-
-
+changeconf input_toggle_fast_forward = "nul"

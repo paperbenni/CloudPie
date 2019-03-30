@@ -117,6 +117,9 @@ if ! [ -z "$1" ]; then
     update)
         romupdate
         ;;
+    cores)
+        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/update.sh | bash
+        ;;
 
     version)
         echo "veeery early beta"
