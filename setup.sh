@@ -1,77 +1,46 @@
 #!/bin/bash
-pushd ~
-rm -rf cloudpie
+cd
+
+echo "installing cloudpie"
+
+if [ -e cloudpie ]; then
+    curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
+fi
+
 mkdir cloudpie
+mkdir -p retroarch/retroarch retroarch/quicksave
+mkdir -p .config/cloudpie
+mkdir retrorecords
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie/cloudpie.sh
 pb install/install.sh
 pb unpack/unpack.sh
 
-echo "installing cloudpie"
+echo '~/cloudpie/roms' >~/.config/cloudpie/rom.conf
 
-DEVICE=$(uname -m)
+if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
+    sudo add-apt-repository ppa:libretro/testing
+fi
 
-case "$DEVICE" in
-armv6l)
-    echo "raspberry pi"
-    if apt --version; then
-        sudo apt update
-        sudo apt install wget agrep p7zip-full git wget curl
-        wget https://downloads.rclone.org/v1.46/rclone-v1.46-linux-arm64.deb
-        mv *.deb rclone.deb
-        sudo dpkg -i rclone.deb
-        rm rclone.deb
-    fi
+pinstall wget agrep p7zip-full:p7zip wget retroarch curl unrar libcg
+rclone --version || curl https://rclone.org/install.sh | sudo bash
 
-    ;;
+rm -rf .config/retroarch
 
-x86_64)
-    echo "PC"
-    echo '~/cloudpie/roms' >~/.config/cloudpie/rom.conf
+cd cloudpie
+mkdir save path
 
-    if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
-        sudo add-apt-repository ppa:libretro/testing
-    fi
+# install the fuzzy finder fzf
+cd path
+wget https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz
+unpack *.tgz
+rm *.tgz
+wget suckless.surge.sh/st
+wget roverfile.surge.sh/rover
+chmod +x st fzf rover
 
-    pinstall wget agrep p7zip-full:p7zip wget retroarch curl unrar libcg
-    rclone --version || curl https://rclone.org/install.sh | sudo bash
-
-    mkdir -p ~/retroarch/retroarch
-
-    mkdir -p ~/cloudpie/path
-    pushd ~/cloudpie || exit
-    mkdir save
-
-    #generate new retroarch config files
-    rm -rf ~/.config/retroarch
-    timeout 5 ./retroarch
-
-    popd
-
-    # install the fuzzy finder fzf
-    pushd cloudpie/path
-    wget https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz
-    unpack *.tgz
-    rm *.tgz
-    chmod +x ./fzf
-    popd
-
-    ;;
-esac
-
-pushd ~/
-mkdir -p .config/cloudpie
-
-mkdir retrorecords
-
-mkdir retroarch
-pushd retroarch
-mkdir quicksave
-
-popd
-
-#update retroarch
+cd
 
 cd cloudpie
 cget play.sh update.sh platforms.txt sync.sh download.sh login.sh start.sh changeconf.sh
@@ -84,27 +53,20 @@ sudo chmod +x /bin/cloudrom /bin/cloudpie /bin/retroplay
 
 cget formats.txt
 
-if ! [ "$1" = "nocores" ]; then
-    bash update.sh
-else
+if [ "$1" = "nocores" ]; then
     echo "skipping cores"
+else
+    bash update.sh
 fi
 
 bash changeconf.sh
 
-cd ~/cloudpie/path
-wget suckless.surge.sh/st
-wget roverfile.surge.sh/rover
-chmod +x st rover
-
 cd ~
 
 mkdir -p .config/rclone
-pushd .config/rclone
+cd .config/rclone
 
 if ! cat rclone.conf | grep '[cloudpie]'; then
     echo "adding mega storage"
     curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/rclone.conf >>rclone.conf
 fi
-
-popd
