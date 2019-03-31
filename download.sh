@@ -4,6 +4,7 @@ source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import
 
 pb cloudpie/cloudpie.sh
 pb proton/proton.sh
+pb unpack/unpack.sh
 
 function checkscript() {
     #statements
@@ -85,32 +86,6 @@ function romupdate() {
     popd
 }
 
-function unpack() {
-    echo "unpacking $1"
-    if ! [ -e "$1" ]; then
-        echo "file not found"
-        exit 1
-    fi
-    FILEFORMAT=${1##*.}
-    case "$FILEFORMAT" in
-    zip)
-        unzip -o "$1"
-        ;;
-    7z)
-        7za x ./"$1"
-        ;;
-    rar)
-        unrar x "$1"
-        ;;
-    *)
-        DONTREMOVE=1
-        ;;
-    esac
-    if [ -z "$DONTREMOVE" ]; then
-        rm "$1"
-    fi
-}
-
 #special commands that are not games
 if ! [ -z "$1" ]; then
     case "$1" in
@@ -126,6 +101,11 @@ if ! [ -z "$1" ]; then
         ;;
     help)
         curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/help.txt
+        ;;
+    clean)
+        echo "clearing cache"
+        rm -rf ~/retroarch/cache
+        rm -rf ~/cloudpie/repos
         ;;
     *)
         EXITTHIS=1
@@ -173,7 +153,7 @@ else
     sleep 2
     wget "$LINK$game" -q --show-progress
     sudo pvpn -d
-    unpack "$game"
+    unpack "$game" rm
 fi
 
 popd
