@@ -19,6 +19,11 @@ pb unpack/unpack.sh
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 
+if [ -e ~/roms ]; then
+    echo "detecting existing roms"
+    mv ~/roms ~/cloudpie/roms
+fi
+
 if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
     sudo add-apt-repository ppa:libretro/testing
 fi
