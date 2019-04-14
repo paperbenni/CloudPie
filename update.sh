@@ -43,9 +43,11 @@ rm -rf buildbot*
 rm index.html
 
 for zip in *.zip; do
-    mv "$zip" ../cores/
-    unzip -o ../cores/"$zip"
-    rm ../cores/"$zip"
+    cp "$zip" ../cores/
+    cd ../cores
+    unzip -o "$zip"
+    rm "$zip"
+    cd ../cache
 done
 
 rm mupen64plus_libretro.so
