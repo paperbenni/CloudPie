@@ -2,8 +2,8 @@
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh) || exit
 
-pb rclone/rclone.sh
-pb rclone/login.sh
+pb rclone/rclone
+pb rclone/login
 
 if pgrep rclone >/dev/null; then
     echo "rclone already running!"

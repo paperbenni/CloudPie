@@ -13,9 +13,9 @@ mkdir -p .config/cloudpie
 mkdir retrorecords
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb cloudpie/cloudpie.sh
-pb install/install.sh
-pb unpack/unpack.sh
+pb cloudpie
+pb install
+pb unpack
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 

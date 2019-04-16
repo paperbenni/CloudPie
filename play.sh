@@ -1,6 +1,6 @@
 #!/bin/bash
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb cloudpie/cloudpie.sh
+pb cloudpie
 
 PS3="what platform does your game run on?"
 
