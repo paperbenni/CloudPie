@@ -1,2 +1,2 @@
 #!/bin/sh
-$HOME/cloudpie/path/st -e sh -c "$HOME/cloudpie/play.sh"
+bash $HOME/cloudpie/play.sh

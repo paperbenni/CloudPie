@@ -21,7 +21,7 @@ echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 
 if [ -e ~/roms ]; then
     echo "detecting existing roms"
-    mv ~/roms ~/cloudpie/roms
+    mv ~/roms ~/cloudpie/
 fi
 
 if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then

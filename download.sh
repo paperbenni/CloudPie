@@ -37,9 +37,9 @@ function repoload() {
     # $3 is the system name
     # $4 is the file extension
     rm "$2".txt
-    echo "updating $3 repos"
-    curl https://the-eye.eu/public/rom/$1/ >"$2".2.tmp
+    echo "updating $(echo $1 | urldecode) repos"
 
+    curl https://the-eye.eu/public/rom/$1/ >"$2".2.tmp
     if ! grep "z64" <"$2.2.tmp"; then
         curl http://the-eye.eu/public/rom/$1/ >"$2".2.tmp
     fi
@@ -64,11 +64,13 @@ function romupdate() {
     mkdir -p ~/cloudpie/repos
     pushd ~/cloudpie/repos
 
-    repoload 'Nintendo%2064/Roms' n64 "Nintendo 64" z64
-    repoload 'SNES' snes "Super Nintendo Entertainment System" zip
-    repoload 'Playstation/Games/NTSC' psx "Play Station 1" zip
-    repoload 'Nintendo%20Gameboy%20Advance' gba "Game Boy Advance" zip
-    repoload 'Nintendo%20DS' ds "Nintendo DS" 7z
+    repoload 'Nintendo%2064/Roms' n64
+    repoload 'SNES' snes
+    repoload 'Playstation/Games/NTSC' psx
+    repoload 'Nintendo%20Gameboy%20Advance' gba
+    repoload 'Nintendo%20DS' ds
+    repload 'NES' nes
+    
     popd
 }
 
