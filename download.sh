@@ -27,6 +27,9 @@ function mkcd() {
     fi
     cd "$1"
 }
+urldecode() {
+    'sed "s@+@ @g;s@%@\\\\x@g" | xargs -0 printf "%b"'
+}
 
 function repoload() {
     # $1 is the link
@@ -35,35 +38,18 @@ function repoload() {
     # $4 is the file extension
     rm "$2".txt
     echo "updating $3 repos"
-    curl https://the-eye.eu/public/rom/$1/ >"$2".tmp
+    curl https://the-eye.eu/public/rom/$1/ >"$2".2.tmp
 
+    if ! grep "z64" <"$2.2.tmp"; then
+        curl http://the-eye.eu/public/rom/$1/ >"$2".2.tmp
+    fi
+
+    cat "$2.2.tmp"
     #decodes spaces and other characters from html links
-    urldecode() {
-        : "${*//+/ }"
-        echo -e "${_//%/\\x}"
-    }
-
-    getlink() {
-        NOPREFIX=${1#*\<a href=\"}
-        NOSUFFIX=${NOPREFIX%\">*\</a\>*}
-        echo "$NOSUFFIX"
-    }
-
-    while read p; do
-        # download links are <a> objects
-        if ! echo "$p" | grep -q '<a href="'; then
-            continue
-        fi
-
-        # filter out links like the discord of contact info
-        if echo "$p" | grep -q 'https://'; then
-            continue
-        fi
-        urldecode $(getlink "$p") >>"$2".txt
-    done <"$2".tmp
-
+    sed -n 's/.*href="\([^"]*\).*/\1/p' "$2".2.tmp >"$2.tmp"
+    rm "$2.2.tmp"
+    cat "$2".tmp | urldecode >"$2".txt
     rm "$2".tmp
-
     # add the link prefix as the last line
     echo "https://the-eye.eu/public/rom/$1/" >>"$2".txt
     sleep 1
