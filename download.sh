@@ -28,7 +28,7 @@ function mkcd() {
     cd "$1"
 }
 urldecode() {
-    'sed "s@+@ @g;s@%@\\\\x@g" | xargs -0 printf "%b"'
+    echo -e "$(sed 's/+/ /g;s/%\(..\)/\\x\1/g;')"
 }
 
 function repoload() {
