@@ -12,6 +12,7 @@ mkdir -p retroarch/retroarch retroarch/quicksave
 mkdir -p .config/cloudpie
 mkdir retrorecords
 
+#paperbenni imports
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie
 pb install
@@ -24,12 +25,19 @@ if [ -e ~/roms ]; then
     mv ~/roms ~/cloudpie/
 fi
 
+#add retroarch daily ppa if ubuntu
 if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
     sudo add-apt-repository ppa:libretro/testing
 fi
 
-pinstall wget expect agrep p7zip-full:p7zip wget retroarch curl unrar libcg
+#install dependencies
+pinstall wget expect agrep p7zip-full:p7zip wget retroarch curl unrar libcg openvpn dialog python
 rclone --version || curl https://rclone.org/install.sh | sudo bash
+#protonvpn
+sudo wget -O protonvpn-cli.sh https://raw.githubusercontent.com/ProtonVPN/protonvpn-cli/master/protonvpn-cli.sh
+sudo chmod +x protonvpn-cli.sh
+sudo ./protonvpn-cli.sh --install
+sudo rm protonvpn-cli.sh
 
 rm -rf .config/retroarch
 
