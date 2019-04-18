@@ -69,8 +69,9 @@ function romupdate() {
     repoload 'Playstation/Games/NTSC' psx
     repoload 'Nintendo%20Gameboy%20Advance' gba
     repoload 'Nintendo%20DS' ds
-    repload 'NES' nes
-    
+    repoload 'NES' nes
+    repoload 'Nintendo%20Gameboy%20Color' gbc
+
     popd
 }
 

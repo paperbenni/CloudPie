@@ -2,5 +2,6 @@ n64
 psx
 snes
 gba
+gbc
 ds
 nes
