@@ -44,7 +44,6 @@ function repoload() {
         curl http://the-eye.eu/public/rom/$1/ >"$2".2.tmp
     fi
 
-    cat "$2.2.tmp"
     #decodes spaces and other characters from html links
     sed -n 's/.*href="\([^"]*\).*/\1/p' "$2".2.tmp >"$2.tmp"
     rm "$2.2.tmp"
