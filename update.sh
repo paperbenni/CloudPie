@@ -2,15 +2,8 @@
 #this updates various retroarch/libretro files
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb cloudpie/cloudpie.sh
-pb mediafire/mediafire.sh
-
-#check if it's a pc
-DEVICE=$(uname -m)
-if ! [ "$DEVICE" = x86_64 ]; then
-    echo "this currently only supports x86_64 linux"
-    exit
-fi
+pb cloudpie
+pb mediafire
 
 #check for internet
 if curl cht.sh; then
@@ -28,9 +21,9 @@ retroupdate autoconfig "https://buildbot.libretro.com/assets/frontend/autoconfig
 retroupdate assets "https://buildbot.libretro.com/assets/frontend/assets.zip"
 #game databases for scanning
 retroupdate database "https://buildbot.libretro.com/assets/frontend/database-rdb.zip"
-
+# core info (what core for what format)
 retroupdate info "https://buildbot.libretro.com/assets/frontend/info.zip"
-
+# shaders
 retroupdate shaders "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip"
 
 #cores

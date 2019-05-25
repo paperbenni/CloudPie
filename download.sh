@@ -2,58 +2,20 @@
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 
-pb cloudpie/cloudpie.sh
-pb proton/proton.sh
-pb unpack/unpack.sh
+pb cloudpie
+pb proton
+pb unpack
+pb bash
 
-function checkscript() {
-    #statements
-    if ! dialog --version >/dev/null; then
-        echo "dialog must be installed in order for this to work"
-        exit
-    fi
+if ! dialog --version >/dev/null; then
+    echo "dialog must be installed in order for this to work"
+    exit
+fi
 
-    if ! curl cht.sh &>/dev/null; then
-        echo "you need internet to do this"
-        exit 1
-    fi
-}
-
-checkscript
-
-function mkcd() {
-    if ! [ -e "$1" ]; then
-        mkdir "$1"
-    fi
-    cd "$1"
-}
-urldecode() {
-    echo -e "$(sed 's/+/ /g;s/%\(..\)/\\x\1/g;')"
-}
-
-function repoload() {
-    # $1 is the link
-    # $2 is the repo file name
-    # $3 is the system name
-    # $4 is the file extension
-    rm "$2".txt
-    echo "updating $(echo $1 | urldecode) repos"
-
-    curl https://the-eye.eu/public/rom/$1/ >"$2".2.tmp
-    if ! grep "z64" <"$2.2.tmp"; then
-        curl http://the-eye.eu/public/rom/$1/ >"$2".2.tmp
-    fi
-
-    #decodes spaces and other characters from html links
-    sed -n 's/.*href="\([^"]*\).*/\1/p' "$2".2.tmp >"$2.tmp"
-    rm "$2.2.tmp"
-    cat "$2".tmp | urldecode >"$2".txt
-    rm "$2".tmp
-    # add the link prefix as the last line
-    echo "https://the-eye.eu/public/rom/$1/" >>"$2".txt
-    sleep 1
-
-}
+if ! curl cht.sh &>/dev/null; then
+    echo "you need internet to do this"
+    exit 1
+fi
 
 function romupdate() {
     if ! curl cht.sh &>/dev/null; then
@@ -83,7 +45,6 @@ if ! [ -z "$1" ]; then
     cores)
         curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/update.sh | bash
         ;;
-
     version)
         echo "veeery early beta"
         ;;
@@ -99,21 +60,17 @@ if ! [ -z "$1" ]; then
         EXITTHIS=1
         ;;
     esac
-    if [ -z "$EXITTHIS" ]; then
-        exit 0
-    else
-        echo "installing game"
-    fi
+    test -z "$EXITTHIS" && exit 0
+
 fi
 
-if ! [ -e ~/cloudpie/repos/n64.txt ]; then
-    romupdate
-fi
+echo "installing game"
+
+test -e ~/cloudpie/repos/n64.txt || romupdate
 
 cd ~/cloudpie
 
-echo "for what console would you like your game?"
-PS3="Select platform: "
+echo "Select console"
 
 console=$(cat platforms.txt | ~/cloudpie/path/fzf)
 zerocheck "$console"
@@ -129,11 +86,11 @@ popd
 echo "downloading $game"
 
 mkdir roms
-pushd "roms"
+cd "roms" || exit
 mkcd "$console"
 GAMENAME=${game%.*}
 
-if ls ./"$GAMENAME".* 1>/dev/null 2>&1; then
+if ls ./"$GAMENAME".* &>/dev/null; then
     echo "game $GAMENAME already exists"
 else
     echo "activating vpn"
@@ -143,8 +100,6 @@ else
     sudo pvpn -d
     unpack "$game" rm
 fi
-
-popd
 
 echo "enjoy the game!"
 sleep 3

@@ -1,19 +1,11 @@
 #!/bin/bash
+pgrep rclone && exit
+command -v rclone &&
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh) || exit
 
 pb rclone/rclone
 pb rclone/login
-
-if pgrep rclone >/dev/null; then
-    echo "rclone already running!"
-    exit
-fi
-
-if ! rclone --version; then
-    echo "please install rclone version 1.46 or higher to use the sync feature"
-    exit
-fi
 
 if [ -e $HOME/cloudpie/cloud.txt ]; then
     echo "already connected"

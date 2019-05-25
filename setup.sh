@@ -1,22 +1,22 @@
 #!/bin/bash
 cd
 
-echo "installing cloudpie"
-
 if [ -e cloudpie ]; then
     curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
 fi
+#paperbenni imports
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb cloudpie
+pb install
+pb unpack
+pb proton
+echo "installing cloudpie"
 
 mkdir cloudpie
 mkdir -p retroarch/retroarch retroarch/quicksave
 mkdir -p .config/cloudpie
 mkdir retrorecords
 
-#paperbenni imports
-source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb cloudpie
-pb install
-pb unpack
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 
