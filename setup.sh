@@ -56,7 +56,7 @@ chmod +x st fzf rover
 cd
 
 cd cloudpie
-cget play.sh update.sh platforms.txt sync.sh download.sh login.sh start.sh changeconf.sh
+cget play.sh update.sh platforms.txt sync.sh download.sh start.sh changeconf.sh
 chmod +x *.sh
 cget bin/cloudrom bin/cloudpie bin/retroplay
 sudo mv retroplay /bin/
