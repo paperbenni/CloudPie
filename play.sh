@@ -29,10 +29,20 @@ pushd "$PLATFORM"
 
 #get a list of all files ending with the extension for the console
 
-FILEENDING=$(cat ~/cloudpie/formats.txt | grep "$PLATFORM" |
+FILEENDINGS=$(cat ~/cloudpie/formats.txt | grep "$PLATFORM" |
     egrep -o ':.*' | egrep -o '[^:].*')
+for FE in "$FILEENDINGS"; do
+    echo "file extension $FE"
+    ls ./*.$FE >>gamecache.txt
+done
 
-GAME=$(ls *.$FILEENDING | ~/cloudpie/path/fzf)
+while read -r line; do
+    echo "file extension $line"
+    ls *.$line >>gamecache.txt
+done <<<"$FILEENDINGS"
+
+GAME=$(cat gamecache.txt | ~/cloudpie/path/fzf)
+rm gamecache.txt
 
 zerocheck "$GAME"
 

@@ -14,11 +14,7 @@ else
     echo "no existing connection found"
 fi
 
-if ! rclogin cloudpie
-then
-  echo "please enter the right password or change account"
-  exit 1
-fi
+rclogin cloudpie
 
 pushd .
 
@@ -38,8 +34,8 @@ while :; do
     mkdir -p ~/cloudpie/save
     sleep 1
     echo "mounting saves for $RNAME"
-    rclone lsd "$RCLOUD:$RNAME"/save || rclone mkdir "$RCLOUD:$RNAME"/save
-    rclone cat "$RCLOUD:$RNAME"/save/cloud.txt || rclone touch "$RCLOUD:$RNAME"/save/cloud.txt
+    rclone lsd "cloudpie:$RNAME"/save || rclone mkdir "cloudpie:$RNAME"/save
+    rclone cat "cloudpie:$RNAME"/save/cloud.txt || rclone touch "cloudpie:$RNAME"/save/cloud.txt
     rmount save ~/cloudpie/save
     sleep 2
 done
