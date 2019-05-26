@@ -6,6 +6,8 @@ pb cloudpie
 pb proton
 pb unpack
 pb bash
+pb dialog
+pb dialog/dmenu
 
 if ! dialog --version >/dev/null; then
     echo "dialog must be installed in order for this to work"
@@ -72,13 +74,13 @@ cd ~/cloudpie
 
 echo "Select console"
 
-console=$(cat platforms.txt | ~/cloudpie/path/fzf)
+console=$(cat platforms.txt | dmenu -l 30)
 zerocheck "$console"
 
 pushd repos
 LINK=$(cat $console.txt | tail -1)
 
-game=$(cat "$console".txt | ~/cloudpie/path/fzf)
+game=$(cat "$console".txt | dmenu -l 30)
 zerocheck "$game"
 
 popd
@@ -94,10 +96,11 @@ if ls ./"$GAMENAME".* &>/dev/null; then
     echo "game $GAMENAME already exists"
 else
     echo "activating vpn"
+    dsudo echo lal
     proton
     sleep 2
     wget "$LINK$game" -q --show-progress
-    sudo pvpn -d
+    dsudo pvpn -d
     unpack "$game" rm
 fi
 

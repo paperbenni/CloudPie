@@ -21,7 +21,7 @@ fi
 pushd ~/cloudpie/roms
 
 #choose console
-PLATFORM=$(ls | ~/cloudpie/path/fzf)
+PLATFORM=$(ls | dmenu -l 30)
 zerocheck "$PLATFORM"
 
 echo "$PLATFORM"
@@ -31,17 +31,13 @@ pushd "$PLATFORM"
 
 FILEENDINGS=$(cat ~/cloudpie/formats.txt | grep "$PLATFORM" |
     egrep -o ':.*' | egrep -o '[^:].*')
-for FE in "$FILEENDINGS"; do
-    echo "file extension $FE"
-    ls ./*.$FE >>gamecache.txt
-done
 
 while read -r line; do
     echo "file extension $line"
     ls *.$line >>gamecache.txt
 done <<<"$FILEENDINGS"
 
-GAME=$(cat gamecache.txt | ~/cloudpie/path/fzf)
+GAME=$(cat gamecache.txt | dmenu -l 30)
 rm gamecache.txt
 
 zerocheck "$GAME"

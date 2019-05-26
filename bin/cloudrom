@@ -1,3 +1,2 @@
 #!/bin/sh
-echo "$TERM" | grep "dumb" && exit
 bash $HOME/cloudpie/download.sh "$@"
