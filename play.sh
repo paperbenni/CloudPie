@@ -11,43 +11,39 @@ if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
     pushd ~/cloudpie/save
 
     while ! test -e cloud.txt; do
-        echo "waiting for cloud saves"
+        if ! pgrep dmenu; then
+            echo "waiting for cloud saves"
+        fi
         sleep 5
     done
 
     popd
 fi
 
-pushd ~/cloudpie/roms
-
+cd ~/cloudpie
 #choose console
-PLATFORM=$(ls | dmenu -l 30)
+PLATFORM=$(cat platforms.txt | dmenu -l 30)
 zerocheck "$PLATFORM"
-
 echo "$PLATFORM"
-pushd "$PLATFORM"
-
-#get a list of all files ending with the extension for the console
-
-FILEENDINGS=$(cat ~/cloudpie/formats.txt | grep "$PLATFORM" |
-    egrep -o ':.*' | egrep -o '[^:].*')
-
-while read -r line; do
-    echo "file extension $line"
-    ls *.$line >>gamecache.txt
-done <<<"$FILEENDINGS"
-
-GAME=$(cat gamecache.txt | dmenu -l 30)
-rm gamecache.txt
-
+GAME="$(cat repos/$PLATFORM.txt | dmenu -l 30)"
 zerocheck "$GAME"
 
-if [ -z "$GAME" ]; then
-    echo "operation canceled"
-    exit 0
-    break
+mkcd roms/"$PLATFORM"
+GNAME=${GAME%.*}
+if ! ls $GNAME.*; then
+    ~/cloudpie/download.sh "$PLATFORM" "$GAME"
 fi
 
-echo "starting $GAME"
-openrom "$HOME/cloudpie/roms/$PLATFORM/$GAME" "$PLATFORM"
-echo "hope you had fun"
+while read p; do
+    echo "$p"
+    if echo "$p" | grep "$PLATFORM"; then
+        FILEENDING=$(echo "$p" | egrep -o ':.*' | egrep -o '[^:].*')
+        GAMENAME=${GAME%.*}.$FILEENDING
+        if [ -e "$GAMENAME" ]; then
+            echo "starting $GAME"
+            openrom "$HOME/cloudpie/roms/$PLATFORM/$GAMENAME" "$PLATFORM"
+            echo "hope you had fun"
+            break
+        fi
+    fi
+done <~/cloudpie/formats.txt

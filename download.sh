@@ -9,34 +9,15 @@ pb bash
 pb dialog
 pb dialog/dmenu
 
-if ! dialog --version >/dev/null; then
-    echo "dialog must be installed in order for this to work"
-    exit
-fi
-
 if ! curl cht.sh &>/dev/null; then
     echo "you need internet to do this"
     exit 1
 fi
 
-function romupdate() {
-    if ! curl cht.sh &>/dev/null; then
-        echo "no internet"
-        exit
-    fi
-    mkdir -p ~/cloudpie/repos
-    pushd ~/cloudpie/repos
-
-    repoload 'Nintendo%2064/Roms' n64
-    repoload 'SNES' snes
-    repoload 'Playstation/Games/NTSC' psx
-    repoload 'Nintendo%20Gameboy%20Advance' gba
-    repoload 'Nintendo%20DS' ds
-    repoload 'NES' nes
-    repoload 'Nintendo%20Gameboy%20Color' gbc
-
-    popd
-}
+console="$1"
+zerocheck "$console"
+game="$2"
+zerocheck "$game"
 
 #special commands that are not games
 if ! [ -z "$1" ]; then
@@ -66,30 +47,14 @@ if ! [ -z "$1" ]; then
 
 fi
 
-echo "installing game"
-
-test -e ~/cloudpie/repos/n64.txt || romupdate
-
 cd ~/cloudpie
-
-echo "Select console"
-
-console=$(cat platforms.txt | dmenu -l 30)
-zerocheck "$console"
-
-pushd repos
-LINK=$(cat $console.txt | tail -1)
-
-game=$(cat "$console".txt | dmenu -l 30)
-zerocheck "$game"
-
-popd
+echo "installing game"
+test -e repos/"$console".txt || romupdate
+LINK=$(cat repos/$console.txt | tail -1)
 
 echo "downloading $game"
 
-mkdir roms
-cd "roms" || exit
-mkcd "$console"
+mkcd roms/"$console"
 GAMENAME=${game%.*}
 
 if ls ./"$GAMENAME".* &>/dev/null; then
@@ -99,7 +64,7 @@ else
     dsudo echo lal
     proton
     sleep 2
-    wget "$LINK$game" -q --show-progress
+    wget "$LINK$game" --show-progress
     dsudo pvpn -d
     unpack "$game" rm
 fi
