@@ -64,7 +64,7 @@ else
     dsudo echo lal
     proton
     sleep 2
-    wget "$LINK$game" --show-progress
+    wget "$LINK"$(urlencode "$game") --show-progress
     dsudo pvpn -d
     unpack "$game" rm
 fi

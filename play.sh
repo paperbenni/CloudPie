@@ -25,6 +25,9 @@ cd ~/cloudpie
 PLATFORM=$(cat platforms.txt | dmenu -l 30)
 zerocheck "$PLATFORM"
 echo "$PLATFORM"
+if ! [ -e "repos/$PLATFORM.txt" ]; then
+    romupdate
+fi
 GAME="$(cat repos/$PLATFORM.txt | dmenu -l 30)"
 zerocheck "$GAME"
 
