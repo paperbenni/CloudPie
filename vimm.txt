@@ -1,0 +1,9 @@
+NES:nes
+Genesis:genesis
+SNES:snes
+PS1:psx
+N64:n64
+Dreamcast:dreamcast
+PS2:ps2
+GameCube:gcn
+Wii:wii

@@ -7,17 +7,15 @@ pb bash
 if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
     echo "no existing connection found"
     ~/cloudpie/sync.sh &
-    sleep 10
-    pushd ~/cloudpie/save
+    sleep 5
 
-    while ! test -e cloud.txt; do
+    while ! test -e ~/cloudpie/saves/cloud.txt; do
         if ! pgrep dmenu; then
             echo "waiting for cloud saves"
         fi
         sleep 5
     done
 
-    popd
 fi
 
 cd ~/cloudpie
