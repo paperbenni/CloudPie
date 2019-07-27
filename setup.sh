@@ -31,7 +31,8 @@ if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
 fi
 
 #install dependencies
-pinstall wget expect agrep p7zip-full:p7zip wget retroarch curl unrar libcg openvpn dialog python
+pinstall wget expect agrep p7zip-full:p7zip wget retroarch curl unrar \
+    libcg openvpn dialog python svn:subversion
 rclone --version || curl https://rclone.org/install.sh | sudo bash
 #protonvpn
 sudo wget -O protonvpn-cli.sh https://raw.githubusercontent.com/ProtonVPN/protonvpn-cli/master/protonvpn-cli.sh
