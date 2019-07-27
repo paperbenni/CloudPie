@@ -5,4 +5,5 @@ snes:smc
 gba:gba
 ds:nds
 nes:nes
+nes:NES
 gbc:gbc

@@ -1,47 +1,50 @@
 #!/bin/bash
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie
+pb bash
 
-PS3="what platform does your game run on?"
-
+#connect to cloud storage and wait for the confirmation file
 if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
     echo "no existing connection found"
     ~/cloudpie/sync.sh &
-    sleep 10
-    pushd ~/cloudpie/save
-    if ! [ -e cloud.txt ]; then
-        echo "connection to the internet failed, closing app to avoid data loss"
-        exit
-    fi
-    popd
+    sleep 5
+
+    while ! test -e ~/cloudpie/saves/cloud.txt; do
+        if ! pgrep dmenu; then
+            echo "waiting for cloud saves"
+        fi
+        sleep 5
+    done
+
 fi
 
-pushd ~/cloudpie/roms
-rm formatcache.txt &>/dev/null
-
-PLATFORM=$(ls | ~/cloudpie/path/fzf)
+cd ~/cloudpie
+#choose console
+PLATFORM=$(cat platforms.txt | dmenu -l 30)
 zerocheck "$PLATFORM"
-
 echo "$PLATFORM"
-pushd "$PLATFORM"
-
-while read p; do
-    if echo "$p" | grep "$PLATFORM"; then
-        FILEENDING=${p##*:}
-        ls *.$FILEENDING >>formatcache.txt
-    fi
-done <~/cloudpie/formats.txt
-
-GAME=$(cat formatcache.txt | ~/cloudpie/path/fzf)
+if ! [ -e "repos/$PLATFORM.txt" ]; then
+    romupdate
+fi
+GAME="$(cat repos/$PLATFORM.txt | dmenu -l 30)"
 zerocheck "$GAME"
 
-rm formatcache.txt
-
-if [ -z "$GAME" ]; then
-    echo "operation canceled"
-    exit 0
-    break
+mkcd roms/"$PLATFORM"
+GNAME=${GAME%.*}
+if ! ls $GNAME.*; then
+    ~/cloudpie/download.sh "$PLATFORM" "$GAME"
 fi
-echo "starting $GAME"
-openrom "$HOME/cloudpie/roms/$PLATFORM/$GAME" "$PLATFORM"
-echo "hope you had fun"
+
+while read p; do
+    echo "$p"
+    if echo "$p" | grep "$PLATFORM"; then
+        FILEENDING=$(echo "$p" | egrep -o ':.*' | egrep -o '[^:].*')
+        GAMENAME=${GAME%.*}.$FILEENDING
+        if [ -e "$GAMENAME" ]; then
+            echo "starting $GAME"
+            openrom "$HOME/cloudpie/roms/$PLATFORM/$GAMENAME" "$PLATFORM"
+            echo "hope you had fun"
+            break
+        fi
+    fi
+done <~/cloudpie/formats.txt

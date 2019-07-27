@@ -1,22 +1,22 @@
 #!/bin/bash
 cd
 
-echo "installing cloudpie"
-
 if [ -e cloudpie ]; then
     curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
 fi
+#paperbenni imports
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb cloudpie
+pb install
+pb unpack
+pb proton
+echo "installing cloudpie"
 
 mkdir cloudpie
 mkdir -p retroarch/retroarch retroarch/quicksave
 mkdir -p .config/cloudpie
 mkdir retrorecords
 
-#paperbenni imports
-source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb cloudpie
-pb install
-pb unpack
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 
@@ -32,7 +32,8 @@ fi
 
 #install dependencies
 pinstall wget expect agrep p7zip-full:p7zip wget retroarch curl unrar \
-    libcg openvpn dialog python svn:subversion
+    libcg openvpn dialog python svn:subversion dmenu
+    
 rclone --version || curl https://rclone.org/install.sh | sudo bash
 #protonvpn
 sudo wget -O protonvpn-cli.sh https://raw.githubusercontent.com/ProtonVPN/protonvpn-cli/master/protonvpn-cli.sh
@@ -45,19 +46,11 @@ rm -rf .config/retroarch
 cd cloudpie
 mkdir save path
 
-# install the fuzzy finder fzf
-cd path
-wget https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz
-unpack *.tgz
-rm *.tgz
-wget suckless.surge.sh/st
-wget roverfile.surge.sh/rover
-chmod +x st fzf rover
 
 cd
 
 cd cloudpie
-cget play.sh update.sh platforms.txt sync.sh download.sh login.sh start.sh changeconf.sh
+cget play.sh update.sh platforms.txt sync.sh download.sh start.sh changeconf.sh
 chmod +x *.sh
 cget bin/cloudrom bin/cloudpie bin/retroplay
 sudo mv retroplay /bin/
