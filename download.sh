@@ -14,13 +14,8 @@ if ! curl cht.sh &>/dev/null; then
     exit 1
 fi
 
-console="$1"
-zerocheck "$console"
-game="$2"
-zerocheck "$game"
-
 #special commands that are not games
-if ! [ -z "$1" ]; then
+if [ -n "$1" ]; then
     case "$1" in
     update)
         romupdate
@@ -47,9 +42,24 @@ if ! [ -z "$1" ]; then
 
 fi
 
+# choose platform and game
+if [ -n "$1" ]; then
+    console="$1"
+else
+    console=$(cat ~/cloudpie/platforms.txt | dmenu)
+fi
+zerocheck "$console"
+
+test -e repos/"$console".txt || romupdate
+if [ -n "$2" ]; then
+    game="$2"
+else
+    game=$(cat ~/cloudpie/repos/$console.txt | dmenu)
+fi
+zerocheck "$game"
+
 cd ~/cloudpie
 echo "installing game"
-test -e repos/"$console".txt || romupdate
 LINK=$(cat repos/$console.txt | tail -1)
 
 echo "downloading $game"
