@@ -4,29 +4,21 @@ pb cloudpie
 pb bash
 
 #connect to cloud storage and wait for the confirmation file
-if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
-    echo "no existing connection found"
-    ~/cloudpie/sync.sh &
-    sleep 5
-
-    while ! test -e ~/cloudpie/saves/cloud.txt; do
-        if ! pgrep dmenu; then
-            echo "waiting for cloud saves"
-        fi
-        sleep 5
-    done
-
-fi
+cloudconnect
 
 cd ~/cloudpie
 #choose console
-PLATFORM=$(cat platforms.txt | dmenu -l 30)
+cd cache
+PLATFORM=$(cat $(ls | dm))
+cd ..
+
 zerocheck "$PLATFORM"
 echo "$PLATFORM"
 if ! [ -e "repos/$PLATFORM.txt" ]; then
     romupdate
 fi
-GAME="$(cat repos/$PLATFORM.txt | dmenu -l 30)"
+
+GAME="$(cat repos/$PLATFORM.txt | dm)"
 zerocheck "$GAME"
 
 mkcd roms/"$PLATFORM"
@@ -35,16 +27,16 @@ if ! ls $GNAME.*; then
     ~/cloudpie/download.sh "$PLATFORM" "$GAME"
 fi
 
-while read p; do
-    echo "$p"
-    if echo "$p" | grep "$PLATFORM"; then
-        FILEENDING=$(echo "$p" | egrep -o ':.*' | egrep -o '[^:].*')
-        GAMENAME=${GAME%.*}.$FILEENDING
-        if [ -e "$GAMENAME" ]; then
-            echo "starting $GAME"
-            openrom "$HOME/cloudpie/roms/$PLATFORM/$GAMENAME" "$PLATFORM"
-            echo "hope you had fun"
-            break
-        fi
+FORMATS=$(cat ~/cloudpie/consoles/"$PLATFORM.conf" | grep 'format' | betweenquotes)
+
+for F in "$FORMATS"; do
+    if ! [ -e "$GNAME.$F" ]; then
+        echo "format $F not found"
+        continue
     fi
-done <~/cloudpie/formats.txt
+
+    echo "starting $GAME"
+    openrom "$GNAME.$F" "$PLATFORM"
+    echo "hope you had fun"
+    break
+done

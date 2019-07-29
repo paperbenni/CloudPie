@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+zerocheck "$1"
+zerocheck "$2"
 
 pb cloudpie
 pb proton
@@ -15,51 +17,35 @@ if ! curl cht.sh &>/dev/null; then
 fi
 
 #special commands that are not games
-if [ -n "$1" ]; then
-    case "$1" in
-    update)
-        romupdate
-        ;;
-    cores)
-        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/update.sh | bash
-        ;;
-    version)
-        echo "veeery early beta"
-        ;;
-    help)
-        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/help.txt
-        ;;
-    clean)
-        echo "clearing cache"
-        rm -rf ~/retroarch/cache
-        rm -rf ~/cloudpie/repos
-        ;;
-    *)
-        EXITTHIS=1
-        ;;
-    esac
-    test -z "$EXITTHIS" && exit 0
+case "$1" in
+update)
+    romupdate
+    ;;
+cores)
+    curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/update.sh | bash
+    ;;
+version)
+    echo "veeery early beta"
+    ;;
+help)
+    curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/help.txt
+    ;;
+clean)
+    echo "clearing cache"
+    rm -rf ~/retroarch/cache
+    rm -rf ~/cloudpie/repos
+    ;;
+*)
+    EXITTHIS=1
+    ;;
+esac
+test -z "$EXITTHIS" && exit 0
 
-fi
-
-# choose platform and game
-if [ -n "$1" ]; then
-    console="$1"
-else
-    console=$(cat ~/cloudpie/platforms.txt | dmenu)
-fi
-zerocheck "$console"
-
-test -e repos/"$console".txt || romupdate
-if [ -n "$2" ]; then
-    game="$2"
-else
-    game=$(cat ~/cloudpie/repos/$console.txt | dmenu)
-fi
-zerocheck "$game"
+console="$1"
+game="$2"
 
 cd ~/cloudpie
-echo "installing game"
+echo "installing game $game"
 LINK=$(cat repos/$console.txt | tail -1)
 
 echo "downloading $game"
