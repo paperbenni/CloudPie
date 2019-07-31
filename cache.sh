@@ -14,7 +14,7 @@ mkdir cache &>/dev/null
 
 for i in *; do
     if ! [ -d "$i" ]; then
-        CONSOLENAME=$(cat "$i" | grep 'name' | betweenquotes)
+        CONSOLENAME=$(getconsole "$i" 'name')
         echo ${i%.*} >cache/"$CONSOLENAME"
     fi
 done

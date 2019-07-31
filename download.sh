@@ -46,7 +46,12 @@ game="$2"
 
 cd ~/cloudpie
 echo "installing game $game"
-LINK=$(cat repos/$console.txt | tail -1)
+CLINK=$(getconsole $console link)
+if ! echo $CLINK | grep 'http'; then
+    LINK="https://the-eye.eu/public/rom/$CLINK"
+else
+    LINK="$CLINK"
+fi
 
 echo "downloading $game"
 

@@ -27,7 +27,7 @@ if ! ls $GNAME.*; then
     ~/cloudpie/download.sh "$PLATFORM" "$GAME"
 fi
 
-FORMATS=$(cat ~/cloudpie/consoles/"$PLATFORM.conf" | grep 'format' | betweenquotes)
+FORMATS=$(getconsole "$PLATFORM" 'format')
 
 for F in "$FORMATS"; do
     if ! [ -e "$GNAME.$F" ]; then
