@@ -8,7 +8,11 @@ if ! retroarch --version; then
     exit
 fi
 rm -rf ~/.config/retroarch
-alias ccf="changeconf"
+
+ccf() {
+    changeconf "$@f"
+}
+
 # change the retroarch directory configuration
 ccf system_directory "~/retroarch/bios"
 ccf savefile_directory "~/cloudpie/save"
