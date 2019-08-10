@@ -33,10 +33,9 @@ rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 mv *.sh ~/cloudpie/
 
-cd ~/cloudpie
-sudo ln -s start.sh /usr/bin/cloudpie
-sudo ln -s play.sh /usr/bin/retroplay
-sudo ln -s download.sh /usr/bin/cloudrom
+sudo ln -s ~/cloudpie/start.sh /usr/bin/cloudpie
+sudo ln -s ~/cloudpie/play.sh /usr/bin/retroplay
+sudo ln -s ~/cloudpie/download.sh /usr/bin/cloudrom
 cd
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
