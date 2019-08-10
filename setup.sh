@@ -29,13 +29,15 @@ cd CloudPie
 bash changeconf.sh
 [ "$1" = "nocores" ] || bash update.sh
 mv consoles ~/cloudpie/
-sudo mv bin/* /usr/bin
-sudo chmod +x /usr/bin/cloudpie
-sudo chmod +x /usr/bin/cloudrom
-sudo chmod +x /usr/bin/retroplay
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 mv *.sh ~/cloudpie/
+
+cd ~/cloudpie
+sudo ln -s start.sh /usr/bin/cloudpie
+sudo ln -s play.sh /usr/bin/retroplay
+sudo ln -s download.sh /usr/bin/cloudrom
+cd
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf
 
