@@ -30,11 +30,13 @@ retroupdate shaders "https://buildbot.libretro.com/assets/frontend/shaders_glsl.
 rm -rf ~/retroarch/cores
 mkdir -p ~/retroarch/cores ~/retroarch/cache
 cd ~/retroarch/cache
+echo "fetching cores"
 wget -N -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/ -q --show-progress
 mv */*/*/*/*/*.zip ./
 rm -rf buildbot*
 rm index.html
 
+echo "unpacking cores"
 for zip in *.zip; do
     cp "$zip" ../cores/
     cd ../cores

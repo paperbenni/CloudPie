@@ -26,7 +26,6 @@ echo "installing cloudpie"
 cd .cache
 git clone "https://github.com/paperbenni/CloudPie.git"
 cd CloudPie
-bash changeconf.sh
 [ "$1" = "nocores" ] || bash update.sh
 mv consoles ~/cloudpie/
 rm setup.sh test.sh uninstall.sh
@@ -65,7 +64,7 @@ sudo ./protonvpn-cli.sh --install
 sudo rm protonvpn-cli.sh
 
 rm -rf .config/retroarch
-
+bash ~/cloudpie/changeconf.sh
 cd
 rm -rf .cache/CloudPie
 rcloud cloudpie

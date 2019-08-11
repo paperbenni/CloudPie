@@ -23,13 +23,15 @@ GAME="$(cat repos/$PLATFORM.txt | dm)"
 echo "selected game $GAME"
 zerocheck "$GAME"
 
-cd roms/"$PLATFORM" || exit 1
+mkcd roms/"$PLATFORM"
 
-if ! ls $GNAME.*; then
-    ~/cloudpie/download.sh "$PLATFORM" "$GAME"
+GNAME="${GAME%%.*}"
+echo "game name $GNAME"
+[ -z "$1" ] || echo "optional args $1"
+if ! ls "$GNAME".*; then
+    ~/cloudpie/download.sh "$PLATFORM" "$GAME" "$1"
 fi
 
-GNAME=${GAME%.*}
 FORMATS=$(getconsole "$PLATFORM" 'format')
 
 IFS2=$IFS

@@ -35,11 +35,17 @@ clean)
     rm -rf ~/retroarch/cache
     rm -rf ~/cloudpie/repos
     ;;
+
 *)
     EXITTHIS=1
     ;;
 esac
 test -z "$EXITTHIS" && exit 0
+
+if [ "$3" = "novpn" ]; then
+    NOPROTON="true"
+    echo "deactivating vpn"
+fi
 
 console="$1"
 game="$2"
@@ -62,11 +68,16 @@ if ls ./"$GAMENAME".* &>/dev/null; then
     echo "game $GAMENAME already exists"
 else
     echo "activating vpn"
-    dsudo echo lal
-    proton
-    sleep 2
-    wget "$LINK"/$(urlencode "$game") --show-progress
-    dsudo pvpn -d
+    if [ -z "$NOPROTON" ]; then
+        dsudo echo lal
+        proton
+        sleep 2
+    fi
+    URGAME=$(urlencode "$game")
+    WCOMMAND="wget \"$LINK/$URGAME\" -q --show-progress"
+    echo "$WCOMMAND"
+    st -e sh -c "$WCOMMAND"
+    [ -z "$NOPROTON" ] && dsudo pvpn -d
     unpack "$game" rm
 fi
 
