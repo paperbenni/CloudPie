@@ -63,6 +63,9 @@ echo "downloading $game"
 
 mkcd roms/"$console"
 GAMENAME=${game%.*}
+GAMENAME=${GAMENAME%.7z}
+GAMENAME=${GAMENAME%.rar}
+GAMENAME=${GAMENAME%.zip}
 
 if ls ./"$GAMENAME".* &>/dev/null; then
     echo "game $GAMENAME already exists"

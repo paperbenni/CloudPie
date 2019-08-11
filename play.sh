@@ -14,37 +14,48 @@ cd consoles/cache
 PLATFORM=$(cat "$(ls | dm)")
 cd ~/cloudpie
 zerocheck "$PLATFORM"
-echo "PLATFORM $PLATFORM"
-if ! [ -e "repos/$PLATFORM.txt" ]; then
-    romupdate
-fi
 
-GAME="$(cat repos/$PLATFORM.txt | dm)"
-echo "selected game $GAME"
-zerocheck "$GAME"
-
-mkcd roms/"$PLATFORM"
-
-GNAME="${GAME%%.*}"
-echo "game name $GNAME"
-[ -z "$1" ] || echo "optional args $1"
-if ! ls "$GNAME".*; then
-    ~/cloudpie/download.sh "$PLATFORM" "$GAME" "$1"
-fi
-
-FORMATS=$(getconsole "$PLATFORM" 'format')
-
-IFS2=$IFS
-IFS=','
-for F in $FORMATS; do
-    if ! [ -e "$GNAME.$F" ]; then
-        echo "format $F not found"
-        continue
+if ! cat consoles/$PLATFORM.conf | grep "link"; then
+    echo "console $PLATFORM has no repos, using local files"
+    cd ~/cloudpie/roms/$PLATFORM
+    GAME="$(ls | dm)"
+    openrom "$GAME" "$PLATFORM"
+else
+    echo "repo link found: "
+    cat consoles/$PLATFORM.conf | grep "link"
+    echo "PLATFORM $PLATFORM"
+    if ! [ -e "repos/$PLATFORM.txt" ]; then
+        romupdate
     fi
 
-    echo "found $F, starting $GAME"
-    openrom "$GNAME.$F" "$PLATFORM"
-    echo "hope you had fun"
-    break
-done
-IFS="$IFS2"
+    GAME="$(cat repos/$PLATFORM.txt | dm)"
+    echo "selected game $GAME"
+    zerocheck "$GAME"
+
+    mkcd roms/"$PLATFORM"
+
+    GNAME="${GAME%.*}"
+    echo "game name $GNAME"
+    [ -z "$1" ] || echo "optional args $1"
+    if ! ls "$GNAME".*; then
+        ~/cloudpie/download.sh "$PLATFORM" "$GAME" "$1"
+    fi
+
+    FORMATS=$(getconsole "$PLATFORM" 'format')
+
+    IFS2=$IFS
+    IFS=','
+    for F in $FORMATS; do
+        if ! [ -e "$GNAME.$F" ]; then
+            echo "format $F not found"
+            continue
+        fi
+
+        echo "found $F, starting $GAME"
+        openrom "$GNAME.$F" "$PLATFORM"
+        break
+    done
+    IFS="$IFS2"
+fi
+
+echo "hope you had fun"
