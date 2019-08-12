@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+zerocheck "$1"
+zerocheck "$2"
 
 pb cloudpie
 pb proton
@@ -15,67 +17,70 @@ if ! curl cht.sh &>/dev/null; then
 fi
 
 #special commands that are not games
-if [ -n "$1" ]; then
-    case "$1" in
-    update)
-        romupdate
-        ;;
-    cores)
-        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/update.sh | bash
-        ;;
-    version)
-        echo "veeery early beta"
-        ;;
-    help)
-        curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/help.txt
-        ;;
-    clean)
-        echo "clearing cache"
-        rm -rf ~/retroarch/cache
-        rm -rf ~/cloudpie/repos
-        ;;
-    *)
-        EXITTHIS=1
-        ;;
-    esac
-    test -z "$EXITTHIS" && exit 0
+case "$1" in
+update)
+    romupdate
+    ;;
+cores)
+    curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/update.sh | bash
+    ;;
+version)
+    echo "veeery early beta"
+    ;;
+help)
+    curl https://raw.githubusercontent.com/paperbenni/CloudPie/master/help.txt
+    ;;
+clean)
+    echo "clearing cache"
+    rm -rf ~/retroarch/cache
+    rm -rf ~/cloudpie/repos
+    ;;
 
+*)
+    EXITTHIS=1
+    ;;
+esac
+test -z "$EXITTHIS" && exit 0
+
+if [ "$3" = "novpn" ]; then
+    NOPROTON="true"
+    echo "deactivating vpn"
 fi
 
-# choose platform and game
-if [ -n "$1" ]; then
-    console="$1"
-else
-    console=$(cat ~/cloudpie/platforms.txt | dmenu)
-fi
-zerocheck "$console"
-
-if [ -n "$2" ]; then
-    game="$2"
-else
-    game=$(cat ~/cloudpie/repos/$console.txt | dmenu)
-fi
-zerocheck "$game"
+console="$1"
+game="$2"
 
 cd ~/cloudpie
-echo "installing game"
-test -e repos/"$console".txt || romupdate
-LINK=$(cat repos/$console.txt | tail -1)
+echo "installing game $game"
+CLINK=$(getconsole $console link)
+if ! echo $CLINK | grep 'http'; then
+    LINK="https://the-eye.eu/public/rom/$CLINK"
+else
+    LINK="$CLINK"
+fi
 
 echo "downloading $game"
 
 mkcd roms/"$console"
 GAMENAME=${game%.*}
+GAMENAME=${GAMENAME%.7z}
+GAMENAME=${GAMENAME%.rar}
+GAMENAME=${GAMENAME%.zip}
 
 if ls ./"$GAMENAME".* &>/dev/null; then
     echo "game $GAMENAME already exists"
 else
     echo "activating vpn"
-    dsudo echo lal
-    proton
-    sleep 2
-    wget "$LINK"$(urlencode "$game") --show-progress
-    dsudo pvpn -d
+    if [ -z "$NOPROTON" ]; then
+        dsudo echo lal
+        proton
+        sleep 2
+    fi
+    URGAME=$(urlencode "$game")
+    WCOMMAND="wget \"$LINK/$URGAME\" -q --show-progress"
+    echo "$WCOMMAND"
+    st -e sh -c "$WCOMMAND"
+    [ -z "$NOPROTON" ] && dsudo pvpn -d
     unpack "$game" rm
 fi
 

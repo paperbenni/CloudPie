@@ -25,5 +25,5 @@ fi
 rm -rf cloudpie
 rm -rf retroarch
 rm -rf .config/retroarch
-cd /bin
+cd /usr/bin/
 sudo rm cloudrom cloudpie retroplay

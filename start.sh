@@ -1,16 +1,8 @@
 #!/bin/bash
+source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
+pb cloudpie
 
 echo "starting CloudPie"
-if ! [ -e "$HOME/cloudpie/save/cloud.txt" ]; then
-    ~/cloudpie/sync.sh &
-    sleep 2
-    while ! [ -e ~/cloudpie/save/cloud.txt ]; do
-        if ! pgrep dialog &>/dev/null; then
-            echo "waiting for cloud saves"
-        fi
-        sleep 2
-    done
-
-fi
-
+cloudconnect
+sleep 1
 retroarch
