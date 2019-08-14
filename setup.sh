@@ -27,7 +27,11 @@ cd .cache
 git clone "https://github.com/paperbenni/CloudPie.git"
 cd CloudPie
 [ "$1" = "nocores" ] || bash update.sh
+# console configuration like link and core
 mv consoles ~/cloudpie/
+# core options like resolution
+mkdir -p ~/.config/retroarch
+mv config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 mv *.sh ~/cloudpie/
