@@ -53,7 +53,12 @@ fi
 #install dependencies
 pinstall wget expect agrep p7zip-full:p7zip \
     wget retroarch curl unrar libcg openvpn dialog \
-    python dmenu
+    python
+
+# install suckless tools
+if ! (command -v st && command -v dmenu); then
+    curl https://raw.githubusercontent.com/paperbenni/suckless/master/install.sh | bash
+fi
 
 rclone --version || curl https://rclone.org/install.sh | sudo bash
 
@@ -65,6 +70,7 @@ sudo rm protonvpn-cli.sh
 
 rm -rf .config/retroarch
 bash ~/cloudpie/changeconf.sh
+bash cache.sh
 cd
 rm -rf .cache/CloudPie
 rcloud cloudpie
