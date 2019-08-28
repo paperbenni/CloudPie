@@ -31,7 +31,7 @@ cd CloudPie
 mv consoles ~/cloudpie/
 # core options like resolution
 mkdir -p ~/.config/retroarch
-mv config/* ~/.config/retroarch/
+cp -r config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 mv *.sh ~/cloudpie/
