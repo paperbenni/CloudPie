@@ -18,7 +18,6 @@ fi
 
 cd
 mkdir -p retroarch/retroarch retroarch/quicksave
-mkdir cloudpie
 mkdir -p .config/cloudpie
 mkdir retrorecords
 
@@ -26,22 +25,22 @@ logocloudpie
 echo ""
 echo "installing cloudpie"
 
-cd .cache
 papergit 'CloudPie'
 cd CloudPie
 [ "$1" = "nocores" ] || bash update.sh
-# console configuration like link and core
-mv consoles ~/cloudpie/
+
 # core options like resolution
 mkdir -p ~/.config/retroarch
 cp -r config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
-mv *.sh ~/cloudpie/
 
 sudo ln -s ~/cloudpie/start.sh /usr/bin/cloudpie
 sudo ln -s ~/cloudpie/play.sh /usr/bin/retroplay
 sudo ln -s ~/cloudpie/download.sh /usr/bin/cloudrom
+
+cd /usr/bin
+sudo chmod +x cloudpie cloudrom retroplay
 cd
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf

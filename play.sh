@@ -5,10 +5,9 @@ pb alias
 
 #connect to cloud storage and wait for the confirmation file
 cloudconnect
+cd
+cd cloudpie/consoles/cache
 
-cd ~/cloudpie
-#choose console
-cd consoles/cache
 
 # read out the config file chosen by dmenu
 PLATFORM=$(cat "$(ls | dm)")

@@ -1,17 +1,16 @@
 #!/bin/bash
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb dialog/dialog.sh
+pb dialog
 
-cd ~
+cd
 
 mv cloudpie/roms ~/
 
 echo "looking for saves"
-if pgrep sync.sh || pgrep rclone; then
-    pkill sync.sh
-    pkill rclone
-fi
+
+pkill sync.sh
+pkill rclone
 
 if [ -e ~/cloudpie/save/cloud.txt ]; then
     echo "unmounting saves failed"
@@ -21,5 +20,6 @@ fi
 rm -rf cloudpie
 rm -rf retroarch
 rm -rf .config/retroarch
+
 cd /usr/bin/
-sudo rm cloudrom cloudpie retroplay
+sudo unlink cloudrom cloudpie retroplay
