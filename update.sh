@@ -6,7 +6,7 @@ pb cloudpie
 pb mediafire
 
 #check for internet
-if curl cht.sh; then
+if curl cht.sh &>/dev/null; then
     echo "internet found"
 else
     echo "no internet"

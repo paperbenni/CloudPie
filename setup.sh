@@ -37,12 +37,13 @@ cp -r config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 
-sudo ln -s ~/cloudpie/cloudarch.sh /usr/bin/cloudarch
-sudo ln -s ~/cloudpie/cloudpie.sh /usr/bin/cloudpie
-sudo ln -s ~/cloudpie/cloudrom.sh /usr/bin/cloudrom
+cd
+sudo ln -s cloudpie/cloudarch.sh /usr/bin/cloudarch
+sudo ln -s cloudpie/cloudpie.sh /usr/bin/cloudpie
+sudo ln -s cloudpie/cloudrom.sh /usr/bin/cloudrom
 
 cd /usr/bin
-sudo chmod +x cloudpie cloudrom retroplay
+sudo chmod +x cloudpie cloudarch cloudrom
 cd
 
 echo '~/cloudpie/roms' >.config/cloudpie/rom.conf

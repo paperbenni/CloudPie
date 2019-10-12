@@ -23,4 +23,6 @@ rm -rf retroarch
 rm -rf .config/retroarch
 
 cd /usr/bin/
-sudo unlink cloudrom cloudpie retroplay
+sudo unlink cloudrom
+sudo unlink cloudpie
+sudo unlink cloudarch
