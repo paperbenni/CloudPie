@@ -1,15 +1,6 @@
 #!/bin/bash
+cd
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-cd
-if [ -e cloudpie ]; then
-    curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
-fi
-cd
-mkdir -p retroarch/retroarch retroarch/quicksave
-mkdir cloudpie
-mkdir -p .config/cloudpie
-mkdir retrorecords
-
 #paperbenni imports
 pb cloudpie
 pb install
@@ -19,12 +10,24 @@ pb git
 pb rclone
 pb rclone/login
 pb logo
+clear
+
+if [ -e cloudpie ]; then
+    curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
+fi
+
+cd
+mkdir -p retroarch/retroarch retroarch/quicksave
+mkdir cloudpie
+mkdir -p .config/cloudpie
+mkdir retrorecords
+
 logocloudpie
 echo ""
 echo "installing cloudpie"
 
 cd .cache
-git clone "https://github.com/paperbenni/CloudPie.git"
+papergit 'CloudPie'
 cd CloudPie
 [ "$1" = "nocores" ] || bash update.sh
 # console configuration like link and core
@@ -54,23 +57,22 @@ if cat /etc/os-release | grep 'NAME' | grep -i "ubuntu"; then
     sudo add-apt-repository ppa:libretro/testing
 fi
 
-#install dependencies
-pinstall wget expect agrep p7zip-full:p7zip \
-    wget retroarch curl unrar libcg openvpn dialog \
-    python
-
 # install suckless tools
 if ! (command -v st && command -v dmenu); then
     curl https://raw.githubusercontent.com/paperbenni/suckless/master/install.sh | bash
 fi
 
-rclone --version || curl https://rclone.org/install.sh | sudo bash
+if ! cat /etc/os-release | grep 'Arch Linux'; then
+    rclone --version || curl https://rclone.org/install.sh | sudo bash
+fi
 
 #protonvpn
-sudo wget -O protonvpn-cli.sh https://raw.githubusercontent.com/ProtonVPN/protonvpn-cli/master/protonvpn-cli.sh
-sudo chmod +x protonvpn-cli.sh
-sudo ./protonvpn-cli.sh --install
-sudo rm protonvpn-cli.sh
+if ! command -v pvpn; then
+    sudo wget -O protonvpn-cli.sh https://raw.githubusercontent.com/ProtonVPN/protonvpn-cli/master/protonvpn-cli.sh
+    sudo chmod +x protonvpn-cli.sh
+    sudo ./protonvpn-cli.sh --install
+    sudo rm protonvpn-cli.sh
+fi
 
 rm -rf .config/retroarch
 bash ~/cloudpie/changeconf.sh
