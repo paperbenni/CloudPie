@@ -8,7 +8,6 @@ cloudconnect
 cd
 cd cloudpie/consoles/cache
 
-
 # read out the config file chosen by dmenu
 PLATFORM=$(cat "$(ls | dm)")
 cd ~/cloudpie

@@ -26,7 +26,9 @@ echo ""
 echo "installing cloudpie"
 
 papergit 'CloudPie'
-cd CloudPie
+mv CloudPie cloudpie
+
+cd cloudpie
 [ "$1" = "nocores" ] || bash update.sh
 
 # core options like resolution
@@ -35,9 +37,9 @@ cp -r config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 
-sudo ln -s ~/cloudpie/start.sh /usr/bin/cloudpie
-sudo ln -s ~/cloudpie/play.sh /usr/bin/retroplay
-sudo ln -s ~/cloudpie/download.sh /usr/bin/cloudrom
+sudo ln -s ~/cloudpie/cloudpie.sh /usr/bin/cloudpie
+sudo ln -s ~/cloudpie/retroplay.sh /usr/bin/retroplay
+sudo ln -s ~/cloudpie/cloudrom.sh /usr/bin/cloudrom
 
 cd /usr/bin
 sudo chmod +x cloudpie cloudrom retroplay
@@ -74,7 +76,8 @@ if ! command -v pvpn; then
 fi
 
 rm -rf .config/retroarch
-bash ~/cloudpie/changeconf.sh
+cd ~/cloudpie
+bash changeconf.sh
 bash cache.sh
 cd
 rm -rf .cache/CloudPie
