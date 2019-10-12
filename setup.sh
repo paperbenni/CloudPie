@@ -80,7 +80,9 @@ cd ~/cloudpie
 bash changeconf.sh
 bash cache.sh
 cd
+
 rm -rf .cache/CloudPie
+romupdate
 rcloud cloudpie
 
 echo "installation was successful!"

@@ -7,10 +7,11 @@ cd
 
 mv cloudpie/roms ~/
 
-echo "looking for saves"
-
-pkill sync.sh
-pkill rclone
+while pgrep rclone || pgrep sync.sh; do
+    pkill sync.sh
+    pkill rclone
+    sleep 3
+done
 
 if [ -e ~/cloudpie/save/cloud.txt ]; then
     echo "unmounting saves failed"
