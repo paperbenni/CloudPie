@@ -37,8 +37,8 @@ cp -r config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 
+sudo ln -s ~/cloudpie/cloudarch.sh /usr/bin/cloudarch
 sudo ln -s ~/cloudpie/cloudpie.sh /usr/bin/cloudpie
-sudo ln -s ~/cloudpie/retroplay.sh /usr/bin/retroplay
 sudo ln -s ~/cloudpie/cloudrom.sh /usr/bin/cloudrom
 
 cd /usr/bin
