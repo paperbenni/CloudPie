@@ -36,7 +36,7 @@ else
     echo "game name $GNAME"
     [ -z "$1" ] || echo "optional args $1"
     if ! ls "$GNAME".*; then
-        ~/cloudpie/download.sh "$PLATFORM" "$GAME" "$1"
+        ~/cloudpie/cloudrom.sh "$PLATFORM" "$GAME" "$1"
     fi
 
     FORMATS=$(getconsole "$PLATFORM" 'format')

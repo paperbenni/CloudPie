@@ -37,10 +37,9 @@ cp -r config/* ~/.config/retroarch/
 rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 
-cd
-sudo ln -s cloudpie/cloudarch.sh /usr/bin/cloudarch
-sudo ln -s cloudpie/cloudpie.sh /usr/bin/cloudpie
-sudo ln -s cloudpie/cloudrom.sh /usr/bin/cloudrom
+sudo ln -s $(realpath cloudarch.sh) /usr/bin/cloudarch
+sudo ln -s $(realpath cloudpie.sh) /usr/bin/cloudpie
+sudo ln -s $(realpath cloudrom.sh) /usr/bin/cloudrom
 
 cd /usr/bin
 sudo chmod +x cloudpie cloudarch cloudrom
@@ -78,6 +77,15 @@ fi
 
 rm -rf .config/retroarch
 cd ~/cloudpie
+
+# use different core on more capable hardware
+if command -v nvidia-smi; then
+    rm consoles/psx.conf
+    mv consoles/psxnvidia.conf psx.conf
+else
+    rm consoles/psxnvidia.conf
+fi
+
 bash changeconf.sh
 bash cache.sh
 cd

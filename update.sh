@@ -13,7 +13,7 @@ else
     exit 1
 fi
 
-cd ~
+cd
 
 #controller autoconfig
 retroupdate autoconfig "https://buildbot.libretro.com/assets/frontend/autoconfig.zip"
@@ -49,4 +49,10 @@ rm mupen64plus_libretro.so
 mediafire http://www.mediafire.com/file/ffqxjfvuxz8w12s/mupen64plus_libretro.so
 
 popd
+
+mkdir -p ~/retroarch/bios
+cd ~/retroarch/bios
+wget "$(curl ps1.surge.sh)"
+mv SCP* scph5501.bin
+
 echo "done updating"
