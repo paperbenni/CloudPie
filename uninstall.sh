@@ -9,6 +9,8 @@ pb dialog
 
 cd
 
+echo "Removing cloudpie"
+
 mv cloudpie/roms ~/
 
 while pgrep rclone || pgrep sync.sh; do
@@ -23,6 +25,7 @@ if [ -e ~/cloudpie/save/cloud.txt ]; then
 fi
 
 rm -rf cloudpie
+rm -rf ~/.cache/retroarch
 mv ~/retroarch ~/.cache/retroarch
 rm -rf .config/retroarch
 
@@ -30,3 +33,6 @@ cd /usr/bin/
 sudo unlink cloudrom
 sudo unlink cloudpie
 sudo unlink cloudarch
+sudo rm cloudrom &> /dev/null
+sudo rm cloudpie &> /dev/null
+sudo rm cloudarch &> /dev/null

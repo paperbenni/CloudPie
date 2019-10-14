@@ -25,7 +25,7 @@ fi
 cd
 mkdir -p retroarch/retroarch retroarch/quicksave
 mkdir -p .config/cloudpie
-mkdir retrorecords
+mkdir retrorecords &> /dev/null
 
 logocloudpie
 echo ""
@@ -34,10 +34,10 @@ echo "installing cloudpie"
 papergit 'CloudPie'
 mv CloudPie cloudpie
 
+cd cloudpie
 # core options like resolution
 mkdir -p ~/.config/retroarch
 cp -r config/* ~/.config/retroarch/
-rm setup.sh test.sh uninstall.sh
 chmod +x *.sh
 
 sudo ln -s $(realpath cloudarch.sh) /usr/bin/cloudarch
@@ -83,8 +83,9 @@ cd ~/cloudpie
 
 # use different core on more capable hardware
 if command -v nvidia-smi; then
+    echo "switching to more powerful hardware core"
     rm consoles/psx.conf
-    mv consoles/psxnvidia.conf psx.conf
+    mv consoles/psxnvidia.conf consoles/psx.conf
 else
     rm consoles/psxnvidia.conf
 fi

@@ -15,6 +15,9 @@ fi
 
 cd
 
+mkdir retroarch
+mv .cache/retroarch/* retroarch/
+
 #controller autoconfig
 retroupdate autoconfig "https://buildbot.libretro.com/assets/frontend/autoconfig.zip"
 #ui assets
@@ -27,25 +30,24 @@ retroupdate info "https://buildbot.libretro.com/assets/frontend/info.zip"
 retroupdate shaders "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip"
 
 #cores
-rm -rf ~/retroarch/cores
-mkdir -p ~/retroarch/cores
-cd ~/retroarch/cores
+cd
+rm -rf retroarch/cores
+mkdir -p retroarch/cores
+cd retroarch/cores
 echo "fetching cores"
+ls ~/cloudpie/consoles
 for i in ~/cloudpie/consoles/*.conf; do
     core=$(grep 'core:' <$i | egrep -o '".*"' | egrep -o '[^"]*')
     echo "$core"
     wget -q --show-progress "https://buildbot.libretro.com/nightly/linux/x86_64/latest/${core}_libretro.so.zip"
     unzip "${core}_libretro.so.zip"
 done
-
-rm mupen64plus_libretro.so
-mediafire http://www.mediafire.com/file/ffqxjfvuxz8w12s/mupen64plus_libretro.so
-
-popd
+rm *.zip
+echo "done fetching cores"
 
 mkdir -p ~/retroarch/bios
 cd ~/retroarch/bios
-wget "$(curl ps1.surge.sh)"
+wget -q --show-progress "$(curl ps1.surge.sh)"
 mv SCP* scph5501.bin
 
 echo "done updating"
