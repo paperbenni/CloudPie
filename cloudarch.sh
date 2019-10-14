@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#######################################################
+## start standalone retroarch with cloudpie enabled  ##
+#######################################################
+
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie
 

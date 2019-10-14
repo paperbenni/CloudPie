@@ -1,11 +1,11 @@
 #!/bin/bash
 pgrep rclone && exit
 command -v rclone &&
-
-source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh) || exit
+    source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh) || exit
 
 pb rclone/rclone
 pb rclone/login
+pb dialog/dmenu
 
 if [ -e $HOME/cloudpie/cloud.txt ]; then
     echo "already connected"
@@ -14,16 +14,18 @@ else
     echo "no existing connection found"
 fi
 
+dpop "$(figlet -w 200 CloudPie\ connecting...)" &
 rclogin cloudpie
 
 pushd .
 
 while ! cd ~/cloudpie/save; do
+    rmdpop
+    sleep 0.5
     echo "unmounting saves"
-    if ! sudo umount ~/cloudpie/save; then
-        sudo umount -l ~/cloudpie/save
+    if ! dsudo umount ~/cloudpie/save; then
+        dsudo umount -l ~/cloudpie/save
     fi
-
     sleep 2
 done
 

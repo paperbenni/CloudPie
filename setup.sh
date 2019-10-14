@@ -1,4 +1,10 @@
 #!/bin/bash
+
+#################################
+## install script for CloudPie ##
+## Can be sourced from curl    ##
+#################################
+
 cd
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 #paperbenni imports

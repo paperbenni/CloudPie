@@ -1,5 +1,8 @@
 #!/bin/bash
 
+##################################################
+## Rom management utility                       ##
+##################################################
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 
 pb cloudpie

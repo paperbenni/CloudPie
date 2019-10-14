@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#####################################################
+## caches console name abbreviations in text files ##
+#####################################################
+
 echo "building cloudpie console cache"
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb grep

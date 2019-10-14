@@ -1,4 +1,9 @@
 #!/bin/bash
+
+###################################################################
+## main start script for cloudpie, seen and started by the user  ##
+###################################################################
+
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 
 pb cloudpie
@@ -6,12 +11,8 @@ pb alias
 pb dialog/dmenu
 
 #connect to cloud storage and wait for the confirmation file
-if ! ([ -e ~/cloudpie/saves/cloud.txt ] || pgrep rclone); then
-    dpop "$(figlet -w 200 CloudPie\ connecting...)" &
-fi
 
 cloudconnect
-rmdpop
 
 cd
 cd cloudpie/consoles/cache

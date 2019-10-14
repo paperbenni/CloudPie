@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#################################################################
+## Autoconfigure retroarch settings                            ##
+#################################################################
+
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie/cloudpie.sh
 
@@ -8,7 +12,6 @@ if ! retroarch --version; then
     exit
 fi
 rm -rf ~/.config/retroarch
-
 
 # change the retroarch directory configuration
 changeconf system_directory "~/retroarch/bios"

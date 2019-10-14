@@ -1,5 +1,9 @@
 #!/bin/bash
 
+############################################
+## remove cloudpie but keep roms          ##
+############################################
+
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb dialog
 
