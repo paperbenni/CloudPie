@@ -1,7 +1,12 @@
 # CloudPie
 
-This project is aiming to be a cloud solution for RetroPie, Lakka or Retroarch on Linux
+This project is aiming to be a cloud solution for Retroarch on Linux  
 It's not stable or fully functional yet, contributions are always welcome!
+
+## Install
+```
+curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/setup.sh | bash
+```
 
 ## Dependencies
 - wget
@@ -15,11 +20,6 @@ It's not stable or fully functional yet, contributions are always welcome!
 - openvpn
 - dialog
 - python
-
-## Install
-```
-curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/setup.sh | bash
-```
 
 ## Uninstall
 ```
