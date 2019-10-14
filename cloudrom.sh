@@ -73,8 +73,8 @@ else
     echo "activating vpn"
     if [ -z "$NOPROTON" ]; then
         dsudo echo lal
+        dpop "$(figlet -w 200 VPN\ connecting)" 5 &
         proton
-        dpop "$(figlet -w 200 VPN\ connecting)" 5
         sleep 2
     fi
     URGAME=$(urlencode "$game")
