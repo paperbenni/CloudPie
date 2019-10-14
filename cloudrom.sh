@@ -74,6 +74,7 @@ else
     if [ -z "$NOPROTON" ]; then
         dsudo echo lal
         proton
+        dpop "$(figlet -w 200 VPN\ connecting)" 5
         sleep 2
     fi
     URGAME=$(urlencode "$game")

@@ -2,9 +2,11 @@
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie
 pb alias
-
+pb dialog/dmenu
 #connect to cloud storage and wait for the confirmation file
+dpop "$(figlet -w 200 CloudPie\ connecting...)"
 cloudconnect
+rmdpop
 cd
 cd cloudpie/consoles/cache
 
@@ -23,6 +25,7 @@ else
     cat consoles/$PLATFORM.conf | grep "link"
     echo "PLATFORM $PLATFORM"
     if ! [ -e "repos/$PLATFORM.txt" ]; then
+        dpop "$(figlet fetching)" 5
         romupdate
     fi
 
