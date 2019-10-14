@@ -1,8 +1,6 @@
 #!/bin/bash
 
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-zerocheck "$1"
-zerocheck "$2"
 
 pb cloudpie
 pb proton
@@ -10,6 +8,9 @@ pb unpack
 pb bash
 pb dialog
 pb dialog/dmenu
+
+zerocheck "$1"
+zerocheck "$2"
 
 if ! curl cht.sh &>/dev/null; then
     echo "you need internet to do this"

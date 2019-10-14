@@ -28,21 +28,14 @@ retroupdate shaders "https://buildbot.libretro.com/assets/frontend/shaders_glsl.
 
 #cores
 rm -rf ~/retroarch/cores
-mkdir -p ~/retroarch/cores ~/retroarch/cache
-cd ~/retroarch/cache
+mkdir -p ~/retroarch/cores
+cd ~/retroarch/cores
 echo "fetching cores"
-wget -N -r --no-parent https://buildbot.libretro.com/nightly/linux/x86_64/latest/ -q --show-progress
-mv */*/*/*/*/*.zip ./
-rm -rf buildbot*
-rm index.html
-
-echo "unpacking cores"
-for zip in *.zip; do
-    cp "$zip" ../cores/
-    cd ../cores
-    unzip -o "$zip"
-    rm "$zip"
-    cd ../cache
+for i in ~/cloudpie/consoles/*.conf; do
+    core=$(grep 'core:' <$i | egrep -o '".*"' | egrep -o '[^"]*')
+    echo "$core"
+    wget -q --show-progress "https://buildbot.libretro.com/nightly/linux/x86_64/latest/${core}_libretro.so.zip"
+    unzip "${core}_libretro.so.zip"
 done
 
 rm mupen64plus_libretro.so
