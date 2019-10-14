@@ -23,7 +23,7 @@ if [ -e ~/cloudpie/save/cloud.txt ]; then
 fi
 
 rm -rf cloudpie
-rm -rf retroarch
+mv ~/retroarch ~/.cache/retroarch
 rm -rf .config/retroarch
 
 cd /usr/bin/

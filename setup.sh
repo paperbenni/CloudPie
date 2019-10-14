@@ -34,9 +34,6 @@ echo "installing cloudpie"
 papergit 'CloudPie'
 mv CloudPie cloudpie
 
-cd cloudpie
-[ "$1" = "nocores" ] || bash update.sh
-
 # core options like resolution
 mkdir -p ~/.config/retroarch
 cp -r config/* ~/.config/retroarch/
@@ -91,6 +88,8 @@ if command -v nvidia-smi; then
 else
     rm consoles/psxnvidia.conf
 fi
+
+[ "$1" = "nocores" ] || bash update.sh
 
 bash changeconf.sh
 bash cache.sh
