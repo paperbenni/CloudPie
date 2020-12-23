@@ -4,25 +4,12 @@
 ## remove cloudpie but keep roms          ##
 ############################################
 
-source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb dialog
-
-cd
+cd || exit 1
 
 echo "Removing cloudpie"
 
+# don't delete any roms
 mv cloudpie/roms ~/
-
-while pgrep rclone || pgrep sync.sh; do
-    pkill sync.sh
-    pkill rclone
-    sleep 3
-done
-
-if [ -e ~/cloudpie/save/cloud.txt ]; then
-    echo "unmounting saves failed"
-    exit 1
-fi
 
 rm -rf cloudpie
 rm -rf ~/.cache/retroarch

@@ -4,33 +4,38 @@
 ## Autoconfigure retroarch settings                            ##
 #################################################################
 
-source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
-pb cloudpie/cloudpie.sh
-
 if ! retroarch --version; then
     echo "retroarch not installed"
     exit
 fi
-rm -rf ~/.config/retroarch
+
+function changeconf() {
+    if ! [ -e ~/.config/retroarch/retroarch.cfg ]; then
+        notify-send "generating config, please do not do anything with this retroarch instance"
+        timeout 5 retroarch
+    fi
+    NEWVALUE="$1 = \"$2\""
+    sed -i "/^$1 =/c $NEWVALUE" "$HOME"/.config/retroarch/retroarch.cfg
+}
 
 # change the retroarch directory configuration
-changeconf system_directory "~/retroarch/bios"
-changeconf savefile_directory "~/cloudpie/save"
-changeconf recording_output_directory "~/retrorecords"
-changeconf cheat_database_path "~/retroarch/cheats"
-changeconf libretro_directory "~/retroarch/cores"
-changeconf joypad_autoconfig_dir "~/retroarch/autoconfig"
-changeconf content_database_path = "~/retroarch/database"
-changeconf assets_directory "~/retroarch/assets/"
-changeconf libretro_info_path "~/retroarch/info/"
-changeconf video_shader_dir "~/retroarch/shaders"
-changeconf content_database_path "~/retroarch/database"
+changeconf system_directory "$HOME/retroarch/bios"
+changeconf savefile_directory "$HOME/cloudpie/save"
+changeconf recording_output_directory "$HOME/retrorecords"
+changeconf cheat_database_path "$HOME/retroarch/cheats"
+changeconf libretro_directory "$HOME/retroarch/cores"
+changeconf joypad_autoconfig_dir "$HOME/retroarch/autoconfig"
+changeconf content_database_path = "$HOME/retroarch/database"
+changeconf assets_directory "$HOME/retroarch/assets/"
+changeconf libretro_info_path "$HOME/retroarch/info/"
+changeconf video_shader_dir "$HOME/retroarch/shaders"
+changeconf content_database_path "$HOME/retroarch/database"
+
 # switch style menu
-changeconf menu_driver "rgui"
-changeconf rgui_menu_color_theme "17"
-changeconf rgui_menu_user_language "0"
+changeconf menu_driver "xmb"
 
 changeconf automatically_add_content_to_playlist "true"
+
 # turn off annoying hotkeys
 changeconf input_exit_emulator "nul"
 changeconf input_exit_emulator_axis "nul"

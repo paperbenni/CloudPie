@@ -5,7 +5,7 @@
 ## Can be sourced from curl    ##
 #################################
 
-cd
+cd || exit 1
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 #paperbenni imports
 pb cloudpie
@@ -22,7 +22,7 @@ if [ -e cloudpie ]; then
     curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/uninstall.sh | bash
 fi
 
-cd
+cd || exit 1
 mkdir -p retroarch/retroarch retroarch/quicksave
 mkdir -p .config/cloudpie
 mkdir retrorecords &> /dev/null
