@@ -12,5 +12,4 @@ fi
 source <(curl -s https://raw.githubusercontent.com/paperbenni/bash/master/import.sh)
 pb cloudpie
 echo "opening standalone cloudpie game"
-cloudconnect
 openrom "$1"
