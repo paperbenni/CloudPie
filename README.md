@@ -1,9 +1,14 @@
 # CloudPie
 
+## \*construction noises
+
+Major rework on the way, not functional at the moment
+
 This project is aiming to be a cloud solution for Retroarch on Linux  
 It's not stable or fully functional yet, contributions are always welcome!
 
 ## Install
+
 ```
 curl -s https://raw.githubusercontent.com/paperbenni/CloudPie/master/setup.sh | bash
 ```
